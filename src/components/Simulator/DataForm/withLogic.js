@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
-import { useSelector, connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { addList as addCoreList } from '../../../redux/actions/core'
+import { addList as addProcessList } from '../../../redux/actions/process'
 
 const withConnect = Component => {
   const actions = {
+    addCoreList,
+    addProcessList
   }
   return connect(
     null,
@@ -11,7 +15,9 @@ const withConnect = Component => {
 }
 
 const initialState = {
-  whichAlg: ''
+  whichAlg: 'Round Robin',
+  coresNumber: 0,
+  processesNumber: 0
 }
 
 export default Component => withConnect(props => {
@@ -25,10 +31,14 @@ export default Component => withConnect(props => {
   }
 
   const handleChange = (e) => {
+    console.clear()
+    console.log(e.target.name, e.target.value)
     setState({
       ...state,
       [e.target.name]: e.target.value
     })
+
+    console.log(state)
   }
 
   const handleClose = () => {
@@ -41,7 +51,9 @@ export default Component => withConnect(props => {
   }
 
   const handleStartSimulation = () => {
-    
+    console.log(state.coresNumber, state.processesNumber)
+    props.addCoreList(Number(state.coresNumber), state.whichAlg)
+    props.addProcessList(Number(state.processesNumber))
   }
 
   return (
@@ -52,7 +64,7 @@ export default Component => withConnect(props => {
       onChange={handleChange}
       onClose={handleClose}
       onClear={handleClear}
-      onStartSimulatioe={handleStartSimulation}
+      onStartSimulation={handleStartSimulation}
     />
   )
 })

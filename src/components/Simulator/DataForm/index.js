@@ -25,7 +25,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
     },
     {
       label: 'Número de Processos',
-      name: 'processNumber',
+      name: 'processesNumber',
       type: 'text',
       placeholder: 'Número de Processos',
     },

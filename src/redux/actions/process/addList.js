@@ -1,27 +1,16 @@
 import { PROCESS_ADD_LIST } from '../../actionTypes'
-import Core from '../../../struct/Core'
+import Process from '../../../struct/Process'
 
-export default (processAmmount, algType, lastProcessList, quantum = -1) => dispatch => {
+export default (processAmmount) => dispatch => {
 
-  const list = Array(processAmmount).fill(1).map((_, index) => {
-    if (algType === 'Round Robin')
-      return new Core({
-        id: index,
-        name: 'Core ' + index,
-        status: 'waiting for process',
-        processInExecution: 'none',
-        currentQuantum: quantum,
-        processTimeLeft: -1
-      });
-
-    return new Core({
+  const list = Array(processAmmount).fill(1).map((_, index) => (
+    new Process({
       id: index,
-      name: 'Core ' + index,
-      status: 'waiting for process',
-      processInExecution: 'none',
-      processTimeLeft: -1
+      name: 'Process ' + index,
+      status: 'ready'
     })
-  })
+  ))
+  console.warn(list, "process")
 
   dispatch({ type: PROCESS_ADD_LIST, payload: list })
 }
