@@ -16,8 +16,9 @@ const withConnect = Component => {
 
 const initialState = {
   whichAlg: 'Round Robin',
-  coresNumber: 0,
-  processesNumber: 0
+  quantum: 4,
+  coresNumber: 1,
+  processesNumber: 2
 }
 
 export default Component => withConnect(props => {
@@ -31,18 +32,14 @@ export default Component => withConnect(props => {
   }
 
   const handleChange = (e) => {
-    console.clear()
-    console.log(e.target.name, e.target.value)
     setState({
       ...state,
       [e.target.name]: e.target.value
     })
 
-    console.log(state)
   }
 
   const handleClose = () => {
-    console.log(props)
     handleClear()
   }
 
@@ -51,8 +48,7 @@ export default Component => withConnect(props => {
   }
 
   const handleStartSimulation = () => {
-    console.log(state.coresNumber, state.processesNumber)
-    props.addCoreList(Number(state.coresNumber), state.whichAlg)
+    props.addCoreList(Number(state.coresNumber), state.whichAlg, state.quantum)
     props.addProcessList(Number(state.processesNumber))
   }
 

@@ -1,22 +1,15 @@
-import React, { useState } from 'react'
-import styled from 'styled-components';
+import React from 'react'
+import { Drawer } from 'antd'
 import withLogic from './withLogic'
-import { Button, Drawer } from 'antd'
 import { PlusOutlined } from '@ant-design/icons';
 import DataForm from './DataForm'
+import {
+  Container,
+  NewSimulationButton
+} from './styles'
+import Scheduler from '../Scheduler';
 
-export const Container = styled.div`
-  /* height: 100vh; */
-  width: 100%;
-`;
-
-export const NewSimulationButton = styled(Button)`
-  position: fixed;
-  top: 30px;
-  right: 30px;
-`
-
-const Simulator = ({isDrawerVisible, setIsDrawerVisible }) => {
+const Simulator = ({isDrawerVisible, setIsDrawerVisible, showScheduler }) => {
   
   return (
     <Container>
@@ -36,6 +29,8 @@ const Simulator = ({isDrawerVisible, setIsDrawerVisible }) => {
       >
        <DataForm/> 
       </Drawer>
+      {showScheduler && 
+      <Scheduler/>}
     </Container>
   )
 }

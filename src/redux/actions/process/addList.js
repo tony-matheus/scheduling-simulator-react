@@ -7,10 +7,11 @@ export default (processAmmount) => dispatch => {
     new Process({
       id: index,
       name: 'Process ' + index,
-      status: 'ready'
+      state: 'ready'
     })
   ))
   console.warn(list, "process")
+  console.warn(list[processAmmount - 1], "process")
 
   dispatch({ type: PROCESS_ADD_LIST, payload: list })
 }

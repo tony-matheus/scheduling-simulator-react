@@ -11,12 +11,14 @@ const withConnect = Component => {
 }
 
 export default Component => withConnect(props => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isDrawerVisible, setIsDrawerVisible] = useState(true);
+  const coreList = useSelector(state => state.core.list)
 
   return(
     <Component 
       isDrawerVisible={isDrawerVisible} 
       setIsDrawerVisible={setIsDrawerVisible} 
+      showScheduler={(coreList.length > 0)}
     />
   )
 })
