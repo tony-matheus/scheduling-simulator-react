@@ -14,7 +14,7 @@ const Simulator = ({isDrawerVisible, setIsDrawerVisible, showScheduler }) => {
   return (
     <Container>
       <NewSimulationButton type="primary" onClick={() => setIsDrawerVisible(true)}>
-        <PlusOutlined /> New account
+        <PlusOutlined /> New Simulation
       </NewSimulationButton>
       <Drawer
         title="Formulário para nova Simulação"
@@ -27,7 +27,7 @@ const Simulator = ({isDrawerVisible, setIsDrawerVisible, showScheduler }) => {
           </div>
         }
       >
-       <DataForm/> 
+       <DataForm closeDrawer={() => setIsDrawerVisible(false)}/> 
       </Drawer>
       {showScheduler && 
       <Scheduler/>}

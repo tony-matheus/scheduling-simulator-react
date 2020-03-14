@@ -17,8 +17,8 @@ const withConnect = Component => {
 const initialState = {
   whichAlg: 'Round Robin',
   quantum: 4,
-  coresNumber: 1,
-  processesNumber: 2
+  coresNumber: 3,
+  processesNumber: 10
 }
 
 export default Component => withConnect(props => {
@@ -41,6 +41,7 @@ export default Component => withConnect(props => {
 
   const handleClose = () => {
     handleClear()
+    props.closeDrawer()
   }
 
   const handleClear = () => {
@@ -50,6 +51,7 @@ export default Component => withConnect(props => {
   const handleStartSimulation = () => {
     props.addCoreList(Number(state.coresNumber), state.whichAlg, state.quantum)
     props.addProcessList(Number(state.processesNumber))
+    handleClose()
   }
 
   return (

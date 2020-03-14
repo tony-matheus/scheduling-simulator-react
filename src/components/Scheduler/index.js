@@ -1,14 +1,20 @@
 import React from 'react'
+import styled from 'styled-components'
 import withLogic from './withLogic'
-import CoreVisual from '../CoreVisual'
-import ProcessVisual from '../ProcessVisual'
+import CoreList from '../CoreList'
+import ProcessList from '../ProcessList'
 
+export const List = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`
 
-const Scheduler = ({coreList, processList}) => {
+const Scheduler = ({ coreList, processList, terminatedList }) => {
   return (
     <>
-    <CoreVisual coreList={coreList} />
-    <ProcessVisual processList={processList} />
+      <CoreList coreList={coreList} />
+      <ProcessList processList={processList} />
+      <ProcessList processList={terminatedList} title="Finish Process"/>
     </>
   )
 }
