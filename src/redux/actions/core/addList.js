@@ -5,8 +5,8 @@ export default (coresAmount, algType, quantum = -1) => dispatch => {
   const list = Array(coresAmount).fill(1).map((_, index) => {
     if (algType === 'Round Robin')
       return new Core({
-        id: index,
-        name: 'Core ' + index,
+        id: index + 1,
+        name: 'Core ' + (index + 1),
         status: 'waiting',
         processInExecution: 'none',
         quantum,
@@ -21,8 +21,6 @@ export default (coresAmount, algType, quantum = -1) => dispatch => {
       processTimeLeft: -1
     })
   })
-
-  console.error(list, "cores")
 
   dispatch({ type: CORE_ADD_LIST, payload: list })
 }

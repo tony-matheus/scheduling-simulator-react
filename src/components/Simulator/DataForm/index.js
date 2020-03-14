@@ -3,10 +3,11 @@ import Form from 'antd/lib/form/Form'
 import {
   Container,
   ButtonsContainer,
-  ButtonsWrapper
+  ButtonsWrapper,
+  Label
 } from './styles'
 import SelectSimple from '../../_UI/Input/SelectSimple'
-import { Input, Button } from 'antd'
+import { Input, Button, La } from 'antd'
 import withLogic from './withLogic'
 
 const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimulation }) => {
@@ -41,6 +42,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
     <Form>
       {fields.map((field, index) => (
         <Container key={index}>
+          <Label>{field.label}</Label>
           {field.isSelect
             ?
             <SelectSimple

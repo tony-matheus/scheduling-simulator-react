@@ -14,3 +14,8 @@ export const ButtonsWrapper = styled(ButtonsContainer)`
   padding: 0;
   width: 206px;
 `
+
+export const Label = styled.label`
+  font-size: 20px;
+  line-height: 16px;
+`

@@ -41,8 +41,6 @@ const withLogic = Component => withConnect(class extends React.Component {
       let processList = this.state.processList
       let terminatedProcessList = this.state.terminatedProcessList
 
-      console.log(coreList[0].processInExecution.id)
-      console.log(coreList[0].processInExecution.remainingTime)
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy'
@@ -60,18 +58,18 @@ const withLogic = Component => withConnect(class extends React.Component {
             terminatedProcessList.push(core.processInExecution)
           } else {
             core.processInExecution.state = 'ready'
+            this.reOrderProcess(processList, core.processInExecution)
           }
-          this.reOrderProcess(processList, core.processInExecution)
           core.status = 'waiting'
           core.processInExecution = 'none'
           core.processTimeLeft = core.quantum
-        } else if(core.processInExecution !== 'none')  {
+        } else if (core.processInExecution !== 'none') {
           core.processInExecution.remainingTime -= 1
           core.processTimeLeft -= 1
         }
       })
 
-      if (this.isSimulatorFinish(processList).length) {
+      if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) {
         this.setState({
           coreList,
           processList,
@@ -83,9 +81,6 @@ const withLogic = Component => withConnect(class extends React.Component {
           processList,
           terminatedProcessList
         })
-        console.log(processList)
-        console.log(terminatedProcessList)
-        console.log('para')
       }
 
     }, 1000)
@@ -111,33 +106,41 @@ const withLogic = Component => withConnect(class extends React.Component {
     processList.push(process);
   }
 
-  isSimulatorFinish = (processList) => {
-    const log = processList.filter(p => p.state !== 'terminated')
-    console.log(log)
-    return log
-  }
+  isSimulatorFinish = (processList) => processList.filter(p => p.state !== 'terminated')
+
+  isCoreWorking = (coreList) => coreList.filter(core => core.status === 'busy')
 
   addNewProcess = () => {
     const process = new Process({
       id: this.state.processList.length,
-      name: 'Process ' + this.state.processList.length,
+      name: 'Process ' + (this.state.processList.length + this.state.terminatedProcessList.length + 1),
       state: 'ready',
     })
+    if (!this.state.processList.length) {
+      this.setState({
+        processList: [
+          ...this.state.processList,
+          process
+        ]
+      }, this.roundRobin)
+    } else {
+      this.setState({
+        processList: [
+          ...this.state.processList,
+          process
+        ]
+      })
+    }
 
-    this.setState({
-      processList: [
-        ...this.state.processList,
-        process
-      ]
-    })
   }
-  
+
   render() {
     return (
       <Component
         coreList={this.state.coreList}
         processList={this.state.processList.filter(p => p.state !== 'terminated')}
         terminatedList={this.state.terminatedProcessList}
+        onAddProcess={this.addNewProcess}
       />
     )
   }
