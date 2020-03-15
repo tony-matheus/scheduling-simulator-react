@@ -24,8 +24,8 @@ export const StatusBar = styled.div`
   }}
   width: 5%;
   height: 100%;
-  border-bottom-right-radius: 12px;
-  border-top-right-radius: 12px;
+  border-bottom-right-radius: 10px;
+  border-top-right-radius: 10px;
 `
 
 export const Wrapper = styled.div`

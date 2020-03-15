@@ -26,16 +26,88 @@ const withLogic = Component => withConnect(class extends React.Component {
     this.state = {
       coreList: props.core.list,
       processList: props.process.list,
-      terminatedProcessList: []
+      terminatedProcessList: [],
+      randomInterval: ''
     }
   }
 
   componentWillMount() {
-    this.roundRobin()
+    const interval = setInterval(()=>{
+      this.addNewProcess()
+    }, 30000)
+    switch(this.props.whichAlg){
+      case 'Round Robin':
+        this.roundRobin()
+        break;
+        case 'SJF':
+          this.SJF()
+          break;
+        case 'FIFO':
+          this.FIFO()
+          break;
+      default:
+        this.roundRobin()
+        break;
+    }
+    this.setState({
+      randomInterval: interval
+    })
+  }
+
+  SJF = () => {
+    setTimeout(() => {
+      let coreList = this.state.coreList
+      let processList = this.state.processList
+      let terminatedProcessList = this.state.terminatedProcessList
+
+      coreList.forEach((core, index) => {
+
+      })
+
+      if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) { // é pra continuar ?
+        this.setState({
+          coreList,
+          processList,
+          terminatedProcessList
+        }, this.roundRobin)
+      } else {
+        this.setState({
+          coreList,
+          processList,
+          terminatedProcessList
+        })
+      }
+    }, 1000)
+  }
+
+  FIFO = () => {
+    setTimeout(() => {
+      let coreList = this.state.coreList
+      let processList = this.state.processList
+      let terminatedProcessList = this.state.terminatedProcessList
+
+      coreList.forEach((core, index) => {
+
+      })
+
+      if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) { // é pra continuar ?
+        this.setState({
+          coreList,
+          processList,
+          terminatedProcessList
+        }, this.roundRobin)
+      } else {
+        this.setState({
+          coreList,
+          processList,
+          terminatedProcessList
+        })
+      }
+    }, 1000)
+    //code here
   }
 
   roundRobin = () => {
-
     setTimeout(() => {
       let coreList = this.state.coreList
       let processList = this.state.processList
@@ -69,7 +141,7 @@ const withLogic = Component => withConnect(class extends React.Component {
         }
       })
 
-      if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) {
+      if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) { // é pra continuar ?
         this.setState({
           coreList,
           processList,

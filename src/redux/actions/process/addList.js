@@ -1,8 +1,7 @@
 import { PROCESS_ADD_LIST } from '../../actionTypes'
 import Process from '../../../struct/Process'
 
-export default (processAmmount) => dispatch => {
-
+export default (processAmmount, whichAlg = '') => dispatch => {
   const list = Array(processAmmount).fill(1).map((_, index) => (
     new Process({
       id: index + 1,

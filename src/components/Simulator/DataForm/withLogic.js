@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addList as addCoreList } from '../../../redux/actions/core'
 import { addList as addProcessList } from '../../../redux/actions/process'
@@ -22,13 +22,14 @@ const initialState = {
 }
 
 export default Component => withConnect(props => {
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(initialState)
 
   const handleSelectAlg = (value, option) => {
     setState({
       ...state,
       [option.props.name]: value
-    });
+    })
+    props.changeWhichAlg(value)
   }
 
   const handleChange = (e) => {
@@ -36,7 +37,6 @@ export default Component => withConnect(props => {
       ...state,
       [e.target.name]: e.target.value
     })
-
   }
 
   const handleClose = () => {

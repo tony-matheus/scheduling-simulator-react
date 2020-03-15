@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useSelector, connect } from 'react-redux'
 
 const withConnect = Component => {
@@ -11,14 +11,17 @@ const withConnect = Component => {
 }
 
 export default Component => withConnect(props => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(true);
+  const [isDrawerVisible, setIsDrawerVisible] = useState(true)
   const coreList = useSelector(state => state.core.list)
+  const [whichAlg, setWhichAlg] = useState('')
 
-  return(
-    <Component 
-      isDrawerVisible={isDrawerVisible} 
-      setIsDrawerVisible={setIsDrawerVisible} 
+  return (
+    <Component
+      isDrawerVisible={isDrawerVisible}
+      setIsDrawerVisible={setIsDrawerVisible}
       showScheduler={(coreList.length > 0)}
+      changeWhichAlg={setWhichAlg}
+      whichAlg={whichAlg}
     />
   )
 })
