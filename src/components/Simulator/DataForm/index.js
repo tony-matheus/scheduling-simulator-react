@@ -16,7 +16,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
       label: 'Algoritmo de Escalonamento',
       name: 'whichAlg',
       isSelect: true,
-      selectFields: ["Round Robin", 'SFJ', 'FIFO']
+      selectFields: ["Round Robin", 'SJF', 'FIFO']
     },
     {
       label: 'Número de Quantum',

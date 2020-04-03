@@ -32,19 +32,19 @@ const withLogic = Component => withConnect(class extends React.Component {
   }
 
   componentWillMount() {
-    const interval = setInterval(()=>{
+    const interval = setInterval(() => {
       this.addNewProcess()
     }, 30000)
-    switch(this.props.whichAlg){
+    switch (this.props.whichAlg) {
       case 'Round Robin':
         this.roundRobin()
         break;
-        case 'SJF':
-          this.SJF()
-          break;
-        case 'FIFO':
-          this.FIFO()
-          break;
+      case 'SJF':
+        this.SJF()
+        break;
+      case 'FIFO':
+        this.FIFO()
+        break;
       default:
         this.roundRobin()
         break;
@@ -56,20 +56,41 @@ const withLogic = Component => withConnect(class extends React.Component {
 
   SJF = () => {
     setTimeout(() => {
-      let coreList = this.state.coreList
-      let processList = this.state.processList
-      let terminatedProcessList = this.state.terminatedProcessList
+      let coreList = this.state.coreList;
+      let processList = this.state.processList;
+      let terminatedProcessList = this.state.terminatedProcessList;
+
+      this.reOrderTimes(processList);
 
       coreList.forEach((core, index) => {
-
-      })
+        if (core.status === 'waiting' && this.nextProcess(processList)) {
+          core.status = 'busy';
+          if (core.processInExecution === 'none') {
+            core.processInExecution = this.getProcess(processList);
+            core.processTimeLeft = this.getProcess(processList).totalTIme;
+            core.processInExecution.state = 'running'
+          }
+        } else if (core.processInExecution.remainingTime === 0) {
+          core.processInExecution.state = 'terminated';
+          const index = processList.findIndex(p => {
+            return p.id === core.processInExecution.id
+          });
+          processList.splice(index, 1);
+          terminatedProcessList.push(core.processInExecution);
+          core.status = 'waiting';
+          core.processInExecution = 'none';
+        } else if (core.processInExecution !== 'none') {
+          core.processInExecution.remainingTime -= 1;
+          core.processTimeLeft -= 1
+        }
+      });
 
       if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) { // é pra continuar ?
         this.setState({
           coreList,
           processList,
           terminatedProcessList
-        }, this.roundRobin)
+        }, this.SJF)
       } else {
         this.setState({
           coreList,
@@ -78,24 +99,43 @@ const withLogic = Component => withConnect(class extends React.Component {
         })
       }
     }, 1000)
-  }
+  };
 
   FIFO = () => {
     setTimeout(() => {
-      let coreList = this.state.coreList
-      let processList = this.state.processList
-      let terminatedProcessList = this.state.terminatedProcessList
+      let coreList = this.state.coreList;
+      let processList = this.state.processList;
+      let terminatedProcessList = this.state.terminatedProcessList;
 
       coreList.forEach((core, index) => {
-
-      })
+        if (core.status === 'waiting' && this.nextProcess(processList)) {
+          core.status = 'busy';
+          if (core.processInExecution === 'none') {
+            core.processInExecution = this.getProcess(processList);
+            core.processTimeLeft = this.getProcess(processList).totalTIme;
+            core.processInExecution.state = 'running'
+          }
+        } else if (core.processInExecution.remainingTime === 0) {
+          core.processInExecution.state = 'terminated';
+          const index = processList.findIndex(p => {
+            return p.id === core.processInExecution.id
+          });
+          processList.splice(index, 1);
+          terminatedProcessList.push(core.processInExecution);
+          core.status = 'waiting';
+          core.processInExecution = 'none';
+        } else if (core.processInExecution !== 'none') {
+          core.processInExecution.remainingTime -= 1;
+          core.processTimeLeft -= 1
+        }
+      });
 
       if (this.isSimulatorFinish(processList).length || this.isCoreWorking(coreList).length) { // é pra continuar ?
         this.setState({
           coreList,
           processList,
           terminatedProcessList
-        }, this.roundRobin)
+        }, this.FIFO)
       } else {
         this.setState({
           coreList,
@@ -103,9 +143,8 @@ const withLogic = Component => withConnect(class extends React.Component {
           terminatedProcessList
         })
       }
-    }, 1000)
-    //code here
-  }
+    }, 1000);
+  };
 
   roundRobin = () => {
     setTimeout(() => {
@@ -205,6 +244,18 @@ const withLogic = Component => withConnect(class extends React.Component {
     }
 
   }
+
+  reOrderTimes = (processList) => {
+    processList.sort(function (a, b) {
+      if (a.totalTIme > b.totalTIme) {
+        return 1;
+      }
+      if (a.totalTIme < b.totalTIme) {
+        return -1;
+      }
+      return 0;
+    });
+  };
 
   render() {
     return (
