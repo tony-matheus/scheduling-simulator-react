@@ -233,7 +233,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           ...this.state.processList,
           process
         ]
-      }, this.roundRobin)
+      }, (this.props.whichAlg === "Round Robin")? this.roundRobin:(this.props.whichAlg === "FIFO")? this.FIFO : this.SJF)
     } else {
       this.setState({
         processList: [
