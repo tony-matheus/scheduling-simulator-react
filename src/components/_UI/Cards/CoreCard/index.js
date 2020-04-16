@@ -11,16 +11,15 @@ import {
   BottomWrapper,
   TimeColumn,
   TimeText,
-  TimeCount,
+  TimeCount
 } from './styles'
-
 
 const CoreCard = ({ name, status, processTimeLeft, processInExecution }) => {
   return (
-    <Container >
+    <Container>
       <Wrapper>
         <TopWrapper status={status}>
-          <TextWrapper >
+          <TextWrapper>
             <Title>{name}</Title>
             <SubTitle>{processInExecution.name || 'No Process'}</SubTitle>
           </TextWrapper>
@@ -31,11 +30,11 @@ const CoreCard = ({ name, status, processTimeLeft, processInExecution }) => {
             <TimeText> Core Time Left</TimeText>
             <TimeCount> {processTimeLeft}s</TimeCount>
           </TimeColumn>
-          <TimeColumn status={status}>
+          <TimeColumn status={status} isRight>
             <TimeText> Process Time Left</TimeText>
             <TimeCount> {processInExecution.remainingTime || 'N/A'}s</TimeCount>
           </TimeColumn>
-          
+
         </BottomWrapper>
       </Wrapper>
       <StatusBar status={status} />

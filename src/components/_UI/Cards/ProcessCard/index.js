@@ -10,27 +10,26 @@ import {
   BottomWrapper,
   TimeColumn,
   TimeText,
-  TimeCount,
+  TimeCount
 } from './styles'
 
-
-const ProcessCard = ({ name, state, remainingTime, totalTIme }) => {
+const ProcessCard = ({ id, name, state, remainingTime, totalTIme, killProcess }) => {
   return (
-    <Container >
+    <Container onClick={() => killProcess(id)}>
       <Wrapper>
         <TopWrapper state={state}>
-          <TextWrapper >
+          <TextWrapper>
             <Title>{name}</Title>
           </TextWrapper>
           <StatusText state={state}>{state}</StatusText>
         </TopWrapper>
         <BottomWrapper>
           <TimeColumn state={state}>
-            <TimeText> Process Time Left</TimeText>
+            <TimeText> Time Left</TimeText>
             <TimeCount> {remainingTime}s</TimeCount>
           </TimeColumn>
-          <TimeColumn state={state}>
-            <TimeText> Process Total Time</TimeText>
+          <TimeColumn state={state} isRight>
+            <TimeText> Total Time</TimeText>
             <TimeCount> {totalTIme}s</TimeCount>
           </TimeColumn>
         </BottomWrapper>

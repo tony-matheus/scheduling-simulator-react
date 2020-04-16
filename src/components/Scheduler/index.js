@@ -4,6 +4,7 @@ import withLogic from './withLogic'
 import CoreList from '../CoreList'
 import ProcessList from '../ProcessList'
 import { Button } from 'antd'
+import { PlusOutlined } from '@ant-design/icons'
 
 export const NewProcessButton = styled(Button)`
   position: fixed;
@@ -11,13 +12,35 @@ export const NewProcessButton = styled(Button)`
   right: 30px;
 `
 
-const Scheduler = ({ coreList, processList, terminatedList, onAddProcess }) => {
+export const DisableProcessButton = styled(Button)`
+  position: fixed;
+  top: 170px;
+  right: 30px;
+`
+
+export const Container = styled.div`
+  display: flex;
+`
+
+export const Column = styled.div`
+  width: 50%;
+`
+
+const Scheduler = ({ coreList, processList, killProcess, terminatedList, onAddProcess, isDisableRandom, setIsDisableRandom }) => {
   return (
     <>
-      <NewProcessButton onClick={onAddProcess}>Add New Process</NewProcessButton>
+      <NewProcessButton onClick={onAddProcess}> <PlusOutlined /> Add New Process</NewProcessButton>
+      <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>{(isDisableRandom) ? 'Enable' : 'Disable'} Random Process</DisableProcessButton>
+
       <CoreList coreList={coreList} />
-      <ProcessList processList={processList} />
-      <ProcessList processList={terminatedList} title="Finish Process" />
+      <Container>
+        <Column>
+          <ProcessList killProcess={killProcess} processList={processList.filter(proc => proc.state !== 'running')} />
+        </Column>
+        <Column>
+          <ProcessList processList={terminatedList} title='Finish Process' />
+        </Column>
+      </Container>
     </>
   )
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { connect } from 'react-redux'
 import { addList as addCoreList } from '../../../redux/actions/core'
 import { addList as addProcessList } from '../../../redux/actions/process'
-
+import { message } from 'antd'
 const withConnect = Component => {
   const actions = {
     addCoreList,
@@ -17,7 +17,7 @@ const withConnect = Component => {
 const initialState = {
   whichAlg: 'Round Robin',
   quantum: 4,
-  coresNumber: 3,
+  coresNumber: 2,
   processesNumber: 10
 }
 
@@ -33,9 +33,12 @@ export default Component => withConnect(props => {
   }
 
   const handleChange = (e) => {
+    const name = e.target.name
+    const value = e.target.value
+
     setState({
       ...state,
-      [e.target.name]: e.target.value
+      [name]: value
     })
   }
 
@@ -49,6 +52,14 @@ export default Component => withConnect(props => {
   }
 
   const handleStartSimulation = () => {
+    if ((state.quantum < 2 || state.quantum > 20) || state.quantum === '') {
+      return message.error('Numero de cores deve ser maior que 1 menor que 21')
+    }
+
+    if ((state.coresNumber < 1 || state.coresNumber > 64) && state.coresNumber === '') {
+      return message.error('Numero de cores deve ser maior que 0 menor que 64')
+    }
+
     props.addCoreList(Number(state.coresNumber), state.whichAlg, state.quantum)
     props.addProcessList(Number(state.processesNumber))
     handleClose()

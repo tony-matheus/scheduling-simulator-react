@@ -2,8 +2,8 @@ import styled from 'styled-components/macro'
 import theme from '../../../../utils/theme'
 
 export const Container = styled.div`
-  width: ${182 + (182 * 0.5)}px;
-  height: ${87 + (87 * 0.5)}px;
+  width: ${182 + (182 * 0.8)}px;
+  height: ${87 + (87 * 0.8)}px;
   background-color: ${theme.dark.black};
   border-radius: 10px;
   display: flex;
@@ -48,13 +48,14 @@ export const TopWrapper = styled.div`
     }
   }}
   padding: 10px 0 10px 5px;
-  display: flex; 
+  display: flex;
   justify-content: space-between;
 `
 
 export const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  text-align: left;
 `
 
 export const Title = styled.span`
@@ -67,8 +68,10 @@ export const Title = styled.span`
 `
 
 export const SubTitle = styled(Title)`
-  font-size: ${10 + (10 * 0.5)}px;
-  line-height: ${12 + (12 * 0.5)}px;
+  ${({ children }) => children === 'No Process'
+    ? 'color: #DE1D3B;'
+    : 'color: #2DF489;'}
+
 `
 
 export const StatusText = styled(Title)`
@@ -79,7 +82,7 @@ export const StatusText = styled(Title)`
 export const BottomWrapper = styled.div`
   display: flex;
   padding: 6px 0;
-  /* justify-content: space-between; */
+  justify-content: space-between;
 `
 
 export const TimeColumn = styled.div`
@@ -87,26 +90,29 @@ export const TimeColumn = styled.div`
   flex-direction: column;
   padding-left: 10px;
   padding-right: 10px;
-  ${({ status }) => {
-    switch (status) {
-      case 'waiting':
-        return `border-right: 1px solid ${theme.dark.yellow};`
-      case 'busy':
-        return `border-right: 1px solid ${theme.dark.red};`
-      default:
-        return `border-right: 1px solid ${theme.dark.green};`
+
+  ${({ status, isRight }) => {
+    if (isRight) {
+      switch (status) {
+        case 'waiting':
+          return `border-left: 1px solid ${theme.dark.yellow};`
+        case 'busy':
+          return `border-left: 1px solid ${theme.dark.red};`
+        default:
+          return `border-left: 1px solid ${theme.dark.green};`
+      }
     }
   }}
 `
 
 export const TimeText = styled(Title)`
   font-size: 14px;
-  line-height: 6px;
+  /* line-height: 6px; */
   text-align: center;
 `
 
 export const TimeCount = styled(TimeText)`
   font-size: 16px;
-  line-height: 20px;
+  /* line-height: 20px; */
   width: 100%;
 `

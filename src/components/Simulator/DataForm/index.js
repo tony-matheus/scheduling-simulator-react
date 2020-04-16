@@ -16,7 +16,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
       label: 'Algoritmo de Escalonamento',
       name: 'whichAlg',
       isSelect: true,
-      selectFields: ["Round Robin", 'SJF', 'FIFO']
+      selectFields: ['Round Robin', 'SJF', 'FIFO']
     },
     {
       label: 'Número de Quantum',
@@ -44,24 +44,21 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
         <Container key={index}>
           <Label>{field.label}</Label>
           {field.isSelect
-            ?
-            <SelectSimple
+            ? <SelectSimple
               onChange={onSelectAlg}
               name={field.name}
-              placeholder={'Selecione uma opção'}
+              placeholder='Selecione uma opção'
               data={field.selectFields}
-              defaultValue={"Round Robin"}
+              defaultValue='Round Robin'
               noPosition
               isLeft={false}
             />
-            :
-            <Input
+            : <Input
               name={field.name}
               placeholder={field.placeholder}
               onChange={onChange}
               value={state[field.name]}
-            />
-          }
+            />}
         </Container>
       ))}
       <ButtonsContainer>
@@ -77,14 +74,14 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
             style={{ marginRight: 8 }}
           >
             Limpar
-        </Button>
-          <Button onClick={onStartSimulation} type="primary">
+          </Button>
+          <Button onClick={onStartSimulation} type='primary'>
             Iniciar Simulação
-        </Button>
+          </Button>
         </ButtonsWrapper>
       </ButtonsContainer>
-    </Form >
+    </Form>
   )
 }
 
-export default withLogic(DataForm);
+export default withLogic(DataForm)

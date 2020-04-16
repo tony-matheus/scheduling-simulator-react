@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import CoreCard from '../_UI/Cards/CoreCard'
 
 export const Container = styled.div`
-  padding: 10px 40px;
+  padding: 10px 0;
 `
 
 export const Title = styled.div`
@@ -32,6 +32,4 @@ const CoreList = ({ coreList }) => {
   )
 }
 
-
 export default CoreList
-

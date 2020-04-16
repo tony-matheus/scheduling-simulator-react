@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Process from '../../struct/Process'
-
+import { message } from 'antd'
 const withConnect = Component => {
   const mapStateToProps = state => (
     {
@@ -24,6 +24,7 @@ const withLogic = Component => withConnect(class extends React.Component {
     this.alertBarRef = React.createRef()
 
     this.state = {
+      isDisableRandom: false,
       coreList: props.core.list,
       processList: props.process.list,
       terminatedProcessList: [],
@@ -33,8 +34,11 @@ const withLogic = Component => withConnect(class extends React.Component {
 
   componentWillMount() {
     const interval = setInterval(() => {
-      this.addNewProcess()
-    }, 30000)
+      if ((Math.floor(Math.random() * 4) === 1) && !this.state.isDisableRandom) {
+        message.success('Random Process Added')
+        this.addNewProcess()
+      }
+    }, 3000)
     switch (this.props.whichAlg) {
       case 'Round Robin':
         this.roundRobin()
@@ -233,7 +237,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           ...this.state.processList,
           process
         ]
-      }, (this.props.whichAlg === "Round Robin")? this.roundRobin:(this.props.whichAlg === "FIFO")? this.FIFO : this.SJF)
+      }, (this.props.whichAlg === "Round Robin") ? this.roundRobin : (this.props.whichAlg === "FIFO") ? this.FIFO : this.SJF)
     } else {
       this.setState({
         processList: [
@@ -257,13 +261,28 @@ const withLogic = Component => withConnect(class extends React.Component {
     });
   };
 
+  changeIsDisableRandom = (value) => {
+    message.info('Random Process ' + ((!value) ? 'Enabled' : 'Disabled'))
+    this.setState({ isDisableRandom: value })
+  }
+
+  killProcess = id => {
+    message.info(`Process ${id} Deleted`)
+    this.setState({
+      processList: this.state.processList.filter(proc => proc.id !== id)
+    })
+  }
+
   render() {
     return (
       <Component
+        isDisableRandom={this.state.isDisableRandom}
+        setIsDisableRandom={this.changeIsDisableRandom}
         coreList={this.state.coreList}
-        processList={this.state.processList.filter(p => p.state !== 'terminated')}
+        processList={this.state.processList}
         terminatedList={this.state.terminatedProcessList}
         onAddProcess={this.addNewProcess}
+        killProcess={this.killProcess}
       />
     )
   }

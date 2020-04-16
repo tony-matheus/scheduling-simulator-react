@@ -2,6 +2,7 @@ import styled from 'styled-components/macro'
 import theme from '../../../../utils/theme'
 
 export const Container = styled.div`
+  cursor: pointer;
   width: 182px;
   height: 87px;
   background-color: ${theme.dark.black};
@@ -9,6 +10,32 @@ export const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 10px;
+
+  &:hover {
+    /* justify-content: center;
+    background-color: #fff;
+    & div{
+      width: 50px;
+      height: 50px;
+      border-radius: 60px;
+      & div{
+        display: none
+      }
+    } */
+  }
+
+  &:active {
+    justify-content: center;
+    background-color: #fff;
+    & div{
+      width: 50px;
+      height: 50px;
+      border-radius: 60px;
+      & div{
+        display: none
+      }
+    }
+  }
 `
 
 export const StatusBar = styled.div`
@@ -52,7 +79,7 @@ export const TopWrapper = styled.div`
     }
   }}
   padding: 10px 0 10px 5px;
-  display: flex; 
+  display: flex;
   justify-content: space-between;
 `
 
@@ -83,29 +110,33 @@ export const StatusText = styled(Title)`
 export const BottomWrapper = styled.div`
   display: flex;
   padding: 6px 0;
-  /* justify-content: space-between; */
+  justify-content: space-between;
 `
 
 export const TimeColumn = styled.div`
   display: flex;
   flex-direction: column;
-  width: 57px;
-  ${({ state }) => {
-    switch (state) {
-      case 'ready':
-        return `border-right: 1px solid ${theme.dark.green};`
-      case 'running':
-        return `border-right: 1px solid ${theme.dark.blue};`
-      case 'terminated':
-        return `border-right: 1px solid ${theme.dark.red};`
-      default:
-        return `border-right: 1px solid ${theme.dark.green};`
+  padding-left: 10px;
+  padding-right: 10px;
+
+  ${({ state, isRight }) => {
+    if (isRight) {
+      switch (state) {
+        case 'ready':
+          return `border-left: 1px solid ${theme.dark.green};`
+        case 'running':
+          return `border-left: 1px solid ${theme.dark.blue};`
+        case 'terminated':
+          return `border-left: 1px solid ${theme.dark.red};`
+        default:
+          return `border-left: 1px solid ${theme.dark.green};`
+      }
     }
   }}
 `
 
 export const TimeText = styled(Title)`
-  font-size: 5px;
+  font-size: 10px;
   line-height: 6px;
   text-align: center;
 `
