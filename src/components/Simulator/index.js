@@ -7,7 +7,9 @@ import {
   Container,
   NewSimulationButton
 } from './styles'
-import Scheduler from '../Scheduler'
+// import Scheduler from '../Scheduler'
+import Scheduler from '../SchedulerOld'
+import Kernel from '../Kernel'
 
 const Simulator = ({ isDrawerVisible, setIsDrawerVisible, showScheduler, changeWhichAlg, whichAlg }) => {
   return (
@@ -26,8 +28,10 @@ const Simulator = ({ isDrawerVisible, setIsDrawerVisible, showScheduler, changeW
       >
         <DataForm changeWhichAlg={changeWhichAlg} closeDrawer={() => setIsDrawerVisible(false)} />
       </Drawer>
+      {/* {showScheduler &&
+        <Scheduler whichAlg={whichAlg} />} */}
       {showScheduler &&
-        <Scheduler whichAlg={whichAlg} />}
+        <Kernel whichAlg={whichAlg} />}
     </Container>
   )
 }

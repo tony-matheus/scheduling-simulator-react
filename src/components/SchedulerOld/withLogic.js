@@ -23,17 +23,22 @@ const withLogic = Component => withConnect(class extends React.Component {
 
     this.alertBarRef = React.createRef()
 
-    console.warn(props)
     this.state = {
       isDisableRandom: false,
-      coreList: props.coreList,
-      processList: props.processList,
-      terminatedProcessList: props.terminatedProcessList,
+      coreList: props.core.list,
+      processList: props.process.list,
+      terminatedProcessList: [],
       randomInterval: ''
     }
   }
 
   componentWillMount() {
+    const interval = setInterval(() => {
+      if ((Math.floor(Math.random() * 4) === 1) && !this.state.isDisableRandom) {
+        message.success('Random Process Added')
+        this.addNewProcess()
+      }
+    }, 3000)
     switch (this.props.whichAlg) {
       case 'Round Robin':
         this.roundRobin()
@@ -48,6 +53,9 @@ const withLogic = Component => withConnect(class extends React.Component {
         this.roundRobin()
         break;
     }
+    this.setState({
+      randomInterval: interval
+    })
   }
 
   SJF = () => {
@@ -188,11 +196,6 @@ const withLogic = Component => withConnect(class extends React.Component {
           processList,
           terminatedProcessList
         })
-        this.props.kernelChangeData({
-          coreList,
-          processList,
-          terminatedProcessList
-        })
       }
 
     }, 1000)
@@ -223,7 +226,11 @@ const withLogic = Component => withConnect(class extends React.Component {
   isCoreWorking = (coreList) => coreList.filter(core => core.status === 'busy')
 
   addNewProcess = () => {
-    const process = this.props.kernelCreateProcess()
+    const process = new Process({
+      id: this.state.processList.length,
+      name: 'Process ' + (this.state.processList.length + this.state.terminatedProcessList.length + 1),
+      state: 'ready',
+    })
     if (!this.state.processList.length) {
       this.setState({
         processList: [
