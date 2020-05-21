@@ -82,6 +82,14 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
 
   }
 
+  memoryAllocation = () => {
+
+  }
+
+  free_memory = () => {
+    // call memory manager #free passing index of memory block
+  }
+
   reOrderTimes = (processList) => {
     processList.sort(function (a, b) {
       if (a.totalTIme > b.totalTIme) {
