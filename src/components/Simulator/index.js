@@ -7,8 +7,6 @@ import {
   Container,
   NewSimulationButton
 } from './styles'
-// import Scheduler from '../Scheduler'
-import Scheduler from '../SchedulerOld'
 import Kernel from '../Kernel'
 
 const Simulator = ({ isDrawerVisible, setIsDrawerVisible, showScheduler, changeWhichAlg, whichAlg }) => {

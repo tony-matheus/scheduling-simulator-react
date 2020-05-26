@@ -2,7 +2,7 @@ import React from 'react'
 import Scheduler from '../Scheduler'
 import withLogic from './withLogic'
 import styled from 'styled-components'
-import { Button, PlusOutlined } from 'antd'
+import { Button } from 'antd'
 export const NewProcessButton = styled(Button)`
   position: fixed;
   top: 100px;

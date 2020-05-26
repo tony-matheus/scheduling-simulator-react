@@ -64,29 +64,15 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       state: 'ready',
     })
     return process
-    if (!this.state.processList.length) {
-      this.setState({
-        processList: [
-          ...this.state.processList,
-          process
-        ]
-      }, (this.props.whichAlg === "Round Robin") ? this.roundRobin : (this.props.whichAlg === "FIFO") ? this.FIFO : this.SJF)
-    } else {
-      this.setState({
-        processList: [
-          ...this.state.processList,
-          process
-        ]
-      })
-    }
-
   }
 
-  memoryAllocation = () => {
-
+  memoryAllocation = (requiredMemory) => {
+    //     método que simula uma chamada de sistema por memória, tem como parâmetro um inteiro que representa a quantidade de memória
+    // solicitada em bytes. Tem como retorno o endereço do bloco de memória que foi
+    // usada para satisfazer a chamada.
   }
 
-  free_memory = () => {
+  free_memory = (memoryAddress) => {
     // call memory manager #free passing index of memory block
   }
 
