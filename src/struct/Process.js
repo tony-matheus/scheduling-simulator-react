@@ -21,11 +21,11 @@ class Process {
     return Math.floor(Math.random() * (max-min+1) + min);
   }
 
-  generateRandomStaticMemoryCall = () => {
-
+  generateRandomStaticMemoryCall = (callback = '') => {
+    this.totalMemoryUsed = this.randIntTime(1, 30)
+    callback(this.totalMemoryUsed)
   }
-
-  generateRandomDynamicMemoryCall​ = () => {
+  generateRandomDynamicMemoryCall = () => {
 
   }
 }

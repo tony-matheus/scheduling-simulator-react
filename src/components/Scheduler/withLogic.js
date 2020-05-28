@@ -1,6 +1,5 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import Process from '../../struct/Process'
 import { message } from 'antd'
 const withConnect = Component => {
   const mapStateToProps = state => (
@@ -34,20 +33,21 @@ const withLogic = Component => withConnect(class extends React.Component {
   }
 
   componentWillMount() {
-    switch (this.props.whichAlg) {
-      case 'Round Robin':
-        this.roundRobin()
-        break;
-      case 'SJF':
-        this.SJF()
-        break;
-      case 'FIFO':
-        this.FIFO()
-        break;
-      default:
-        this.roundRobin()
-        break;
-    }
+    this.FIFO()
+    // switch (this.props.whichAlg) {
+    //   case 'Round Robin':
+    //     this.roundRobin()
+    //     break;
+    //   case 'SJF':
+    //     this.SJF()
+    //     break;
+    //   case 'FIFO':
+    //     this.FIFO()
+    //     break;
+    //   default:
+    //     this.roundRobin()
+    //     break;
+    // }
   }
 
   SJF = () => {
@@ -63,7 +63,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           core.status = 'busy';
           if (core.processInExecution === 'none') {
             core.processInExecution = this.getProcess(processList);
-            core.processTimeLeft = this.getProcess(processList).totalTIme;
+            core.processTimeLeft = core.processInExecution.totalTIme;
             core.processInExecution.state = 'running'
           }
         } else if (core.processInExecution.remainingTime === 0) {
@@ -107,9 +107,14 @@ const withLogic = Component => withConnect(class extends React.Component {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy';
           if (core.processInExecution === 'none') {
-            core.processInExecution = this.getProcess(processList);
-            core.processTimeLeft = this.getProcess(processList).totalTIme;
+            const process = this.getProcess(processList)
+            this.allocateProcessMemory(process)
+            // Request for Memory
+               // chamar malloc
+            core.processInExecution = process;
+            core.processTimeLeft = core.processInExecution.totalTIme;
             core.processInExecution.state = 'running'
+
           }
         } else if (core.processInExecution.remainingTime === 0) {
           core.processInExecution.state = 'terminated';
@@ -196,6 +201,11 @@ const withLogic = Component => withConnect(class extends React.Component {
       }
 
     }, 1000)
+  }
+
+  allocateProcessMemory = (process) => {
+    process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
+    // return core
   }
 
   nextProcess = (processList) => processList.find(process => process.state === 'ready')

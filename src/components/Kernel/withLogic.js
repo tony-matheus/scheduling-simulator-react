@@ -1,7 +1,9 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import Process from '../../struct/Process'
+import MemoryManager from '../../struct/MemoryManager'
 import { message } from 'antd'
+import Kernel from '.'
 const withConnect = Component => {
   const mapStateToProps = state => (
     {
@@ -27,7 +29,9 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       isDisableRandom: false,
       coreList: props.core.list,
       processList: props.process.list,
-      terminatedProcessList: []
+      terminatedProcessList: [],
+      memoryManager: new MemoryManager(100)
+      // MemoryManagerSinalized
     }
   }
 
@@ -67,6 +71,10 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
   }
 
   memoryAllocation = (requiredMemory) => {
+    const { memoryManager} = this.state
+    message.success(requiredMemory)
+    memoryManager.malloc(requiredMemory)
+    console.log(memoryManager)
     //     método que simula uma chamada de sistema por memória, tem como parâmetro um inteiro que representa a quantidade de memória
     // solicitada em bytes. Tem como retorno o endereço do bloco de memória que foi
     // usada para satisfazer a chamada.
@@ -120,6 +128,7 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       isDisableRandom={this.state.isDisableRandom}
       setIsDisableRandom={this.changeIsDisableRandom}
       changeData={this.changeData}
+      memoryAllocation={this.memoryAllocation}
     />)
   }
 })

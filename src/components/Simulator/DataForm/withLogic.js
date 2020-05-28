@@ -18,11 +18,11 @@ const initialState = {
   whichAlg: 'Round Robin',
   quantum: 4,
   coresNumber: 2,
-  processesNumber: 10,
+  processesNumber: 3,
   numberQuickList: 2,
   numberMemoryCalls: 2,
   memoryAllocationAlg: 'quick fit',
-  totalInstalledMemory: 1000000000 // one million
+  totalInstalledMemory: 100 // one million
 }
 
 export default Component => withConnect(props => {

@@ -27,7 +27,6 @@ export const Column = styled.div`
 `
 
 const Scheduler = ({ coreList, processList, killProcess, terminatedList, onAddProcess, isDisableRandom, setIsDisableRandom }) => {
-  console.error(processList)
   return (
     <>
       <NewProcessButton onClick={onAddProcess}> <PlusOutlined /> Add New Process</NewProcessButton>

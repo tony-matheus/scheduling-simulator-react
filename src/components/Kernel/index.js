@@ -37,7 +37,9 @@ const Kernel = ({
   coreList,
   processList,
   terminatedProcessList,
-  changeData
+  changeData,
+  // Memory
+  memoryAllocation
 }) => {
   return (
     <>
@@ -51,6 +53,8 @@ const Kernel = ({
         processList={processList}
         terminatedProcessList={terminatedProcessList}
         kernelChangeData={changeData}
+        // Kernel Function
+        memoryAllocation={memoryAllocation}
       />
     </>
   )

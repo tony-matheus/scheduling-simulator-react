@@ -25,6 +25,7 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       memoryOverHead: 0,
       availableMemory: 0,
       occupiedMemory: 0,
+
       // quick fit info
       statisticsTable​: [],
       quickFitFreeBlocks​: [],

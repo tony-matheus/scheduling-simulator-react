@@ -74,7 +74,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
                 name={field.name}
                 placeholder='Selecione uma opção'
                 data={field.selectFields}
-                defaultValue='Round Robin'
+                defaultValue='FIFO'
                 noPosition
                 isLeft={false}
               />
