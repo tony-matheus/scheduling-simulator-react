@@ -72,15 +72,24 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
 
   memoryAllocation = (requiredMemory) => {
     const { memoryManager} = this.state
-    message.success(requiredMemory)
-    memoryManager.malloc(requiredMemory)
+    const memoryPointer = memoryManager.malloc(requiredMemory)
+    // TODO: Visual Part
+    console.clear()
     console.log(memoryManager)
+    console.log(this.state.memoryManager)
+    this.setState({
+      ...this.state,
+      memoryManager
+    })
+    return memoryPointer
+
     //     método que simula uma chamada de sistema por memória, tem como parâmetro um inteiro que representa a quantidade de memória
     // solicitada em bytes. Tem como retorno o endereço do bloco de memória que foi
     // usada para satisfazer a chamada.
   }
 
-  free_memory = (memoryAddress) => {
+  freeMemory = (memoryAddress) => {
+    message.success('livra '+ memoryAddress + ' pra mim ae')
     // call memory manager #free passing index of memory block
   }
 
@@ -128,7 +137,11 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       isDisableRandom={this.state.isDisableRandom}
       setIsDisableRandom={this.changeIsDisableRandom}
       changeData={this.changeData}
+      // kernel methods to memory
       memoryAllocation={this.memoryAllocation}
+      freeMemory={this.freeMemory}
+      // Memory Manager Ui Data
+      totalMemoryUsed={this.state.memoryManager.occupiedMemory}
     />)
   }
 })

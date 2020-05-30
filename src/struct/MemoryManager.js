@@ -2,8 +2,21 @@ import MemoryBlock from './MemoryBlock'
 
 class MemoryManager {
   constructor(totalInstalledMemory) {
-    this.memory = []
-    this.freeBlockList = null
+    this.memory = [
+      new MemoryBlock({
+        totalBlockSize: 40,
+        occupiedSize: 0,
+        blockId: 0,
+        nextFreeBlock: 1
+      }),
+      new MemoryBlock({
+        totalBlockSize: 30,
+        occupiedSize: 0,
+        blockId: 1,
+        nextFreeBlock: null
+      }),
+    ]
+    this.freeBlockList = 0
     this.totalMemory = totalInstalledMemory
     this.memoryOverHead = 0
     this.availableMemory = totalInstalledMemory
@@ -19,8 +32,7 @@ class MemoryManager {
   malloc = (requiredMemory) => {
     switch (this.memoryAlgorith) {
       case 'First Fit':
-        return console.log(this.firstFit(requiredMemory), 'malloc')
-
+        return this.firstFit(requiredMemory)
       default:
         break;
     }
@@ -53,12 +65,13 @@ class MemoryManager {
       return this.createMemoryBlock(requiredMemory)
     }
 
-    if (this.freeBlockList) {
-      const freeBlock = this.checkFirstFreeMemory(requiredMemory)
-      if (!freeBlock) {
+    if (this.freeBlockList || this.freeBlockList === 0) {
+      const freeBlockIndex = this.checkFirstFreeMemory(requiredMemory)
+      if (!freeBlockIndex && freeBlockIndex !== 0) {
         return this.createMemoryBlock(requiredMemory)
       }
-      return freeBlock
+
+      return this.updateFreeBlock(freeBlockIndex, requiredMemory)
     }
 
     return this.createMemoryBlock(requiredMemory)
@@ -82,7 +95,7 @@ class MemoryManager {
   }
 
   createMemoryBlock = (requiredMemory) => {
-    if(!this.checkCanCreateNewBlock(requiredMemory)) { return 'n deu pra criar oh' }
+    if(!this.checkCanCreateNewBlock(requiredMemory)) { return false }
 
     const memoryBlock = new MemoryBlock({
       totalBlockSize: requiredMemory,
@@ -97,7 +110,7 @@ class MemoryManager {
   }
 
   checkCanCreateNewBlock = (requiredMemory) =>
-    this.totalMemory > (this.memory.reduce((memory, sum) => sum + memory.totalBlockSize, 0) + requiredMemory)
+    this.totalMemory > (this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0) + requiredMemory)
 
   addMemoryInformation = (requiredMemory) => {
     this.memoryOverHead += requiredMemory
@@ -111,6 +124,14 @@ class MemoryManager {
     this.availableMemory += requiredMemory
   }
 
+  updateFreeBlock = ( freeBlockIndex, requiredMemory ) => {
+    if((this.memory[freeBlockIndex].occupiedSize + requiredMemory) > this.memory[freeBlockIndex].totalBlockSize) { return false}
+    this.memory[freeBlockIndex].occupiedSize += requiredMemory
+    this.freeBlockList = this.memory[freeBlockIndex].nextFreeBlock
+    this.addMemoryInformation(requiredMemory)
+
+    return freeBlockIndex
+  }
   // qual a diferença entre occupied memory and memoryOverHead
 
 }

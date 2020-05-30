@@ -5,7 +5,7 @@ class Process {
     state,
     processInExecution,
     remainingTime,
-    totalMemoryUsed
+    totalMemoryUsed,
   }){
     this.id = id
     this.name = name
@@ -15,6 +15,7 @@ class Process {
     this.totalTIme = randNumber
     this.remainingTime = randNumber
     this.totalMemoryUsed = totalMemoryUsed
+    this.memoryPointers = []
   }
 
   randIntTime = (min = 1 , max = 20) => {

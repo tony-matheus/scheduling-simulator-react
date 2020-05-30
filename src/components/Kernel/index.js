@@ -3,6 +3,8 @@ import Scheduler from '../Scheduler'
 import withLogic from './withLogic'
 import styled from 'styled-components'
 import { Button } from 'antd'
+import MemoryManagerUi from '../MemoryManager'
+
 export const NewProcessButton = styled(Button)`
   position: fixed;
   top: 100px;
@@ -39,10 +41,13 @@ const Kernel = ({
   terminatedProcessList,
   changeData,
   // Memory
-  memoryAllocation
+  memoryAllocation,
+  totalMemoryUsed,
+  freeMemory
 }) => {
   return (
     <>
+      <MemoryManagerUi totalMemoryUsed={totalMemoryUsed} />
       <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>
         {(isDisableRandom) ? 'Enable' : 'Disable'} Random Process
       </DisableProcessButton>
@@ -55,6 +60,7 @@ const Kernel = ({
         kernelChangeData={changeData}
         // Kernel Function
         memoryAllocation={memoryAllocation}
+        freeMemory={freeMemory}
       />
     </>
   )

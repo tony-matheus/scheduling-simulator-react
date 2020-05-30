@@ -203,10 +203,7 @@ const withLogic = Component => withConnect(class extends React.Component {
     }, 1000)
   }
 
-  allocateProcessMemory = (process) => {
-    process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
-    // return core
-  }
+  allocateProcessMemory = (process) => process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
 
   nextProcess = (processList) => processList.find(process => process.state === 'ready')
 
