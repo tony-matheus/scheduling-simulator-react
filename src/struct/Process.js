@@ -24,7 +24,10 @@ class Process {
 
   generateRandomStaticMemoryCall = (callback = '') => {
     this.totalMemoryUsed = this.randIntTime(1, 30)
-    callback(this.totalMemoryUsed)
+    const memoryPointer = callback(this.totalMemoryUsed)
+    if(memoryPointer || memoryPointer === 0){
+      this.memoryPointers.push(memoryPointer)
+    }
   }
   generateRandomDynamicMemoryCall = () => {
 

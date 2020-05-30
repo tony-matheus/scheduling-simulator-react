@@ -38,8 +38,10 @@ class MemoryManager {
     }
   }
 
-  free = () => {
-
+  free = (memoryAddress) => {
+    const usedMemory = this.memory[memoryAddress].occupiedSize
+    this.removeMemoryInformation(usedMemory)
+    this.memory[memoryAddress].occupiedSize = 0
   }
 
   updateMemoryOverHead = () => {
@@ -118,10 +120,10 @@ class MemoryManager {
     this.availableMemory = this.totalMemory - this.memoryOverHead
   }
 
-  removeMemoryInformation = (requiredMemory) => {
-    this.memoryOverHead -= requiredMemory
-    this.occupiedMemory -= requiredMemory
-    this.availableMemory += requiredMemory
+  removeMemoryInformation = (usedMemory) => {
+    this.memoryOverHead -= usedMemory
+    this.occupiedMemory -= usedMemory
+    this.availableMemory += usedMemory
   }
 
   updateFreeBlock = ( freeBlockIndex, requiredMemory ) => {

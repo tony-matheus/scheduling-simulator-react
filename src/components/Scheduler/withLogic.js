@@ -109,6 +109,8 @@ const withLogic = Component => withConnect(class extends React.Component {
           if (core.processInExecution === 'none') {
             const process = this.getProcess(processList)
             this.allocateProcessMemory(process)
+            console.warn(process.memoryPointers)
+            // message.warn(process.memoryPointers[0])
             // Request for Memory
                // chamar malloc
             core.processInExecution = process;
@@ -118,10 +120,11 @@ const withLogic = Component => withConnect(class extends React.Component {
           }
         } else if (core.processInExecution.remainingTime === 0) {
           core.processInExecution.state = 'terminated';
-          const index = processList.findIndex(p => {
-            return p.id === core.processInExecution.id
-          });
+
+          const index = processList.findIndex(p => p.id === core.processInExecution.id);
           processList.splice(index, 1);
+
+          this.freeMemoryProcess(core.processInExecution)
           terminatedProcessList.push(core.processInExecution);
           core.status = 'waiting';
           core.processInExecution = 'none';
@@ -205,6 +208,14 @@ const withLogic = Component => withConnect(class extends React.Component {
 
   allocateProcessMemory = (process) => process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
 
+  freeMemoryProcess = (process) => {
+    this.props.freeMemory(process.memoryPointers)
+    process.memoryPointers = []
+    // atualiza o process memory pointer
+    // limpa o bloco de memoria
+
+  }
+
   nextProcess = (processList) => processList.find(process => process.state === 'ready')
 
   getProcess = (processList) => {
@@ -262,12 +273,12 @@ const withLogic = Component => withConnect(class extends React.Component {
   };
 
   changeIsDisableRandom = (value) => {
-    message.info('Random Process ' + ((!value) ? 'Enabled' : 'Disabled'))
+    // message.info('Random Process ' + ((!value) ? 'Enabled' : 'Disabled'))
     this.setState({ isDisableRandom: value })
   }
 
   killProcess = id => {
-    message.info(`Process ${id} Deleted`)
+    // message.info(`Process ${id} Deleted`)
     this.setState({
       processList: this.state.processList.filter(proc => proc.id !== id)
     })

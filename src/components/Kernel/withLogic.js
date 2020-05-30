@@ -74,9 +74,6 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
     const { memoryManager} = this.state
     const memoryPointer = memoryManager.malloc(requiredMemory)
     // TODO: Visual Part
-    console.clear()
-    console.log(memoryManager)
-    console.log(this.state.memoryManager)
     this.setState({
       ...this.state,
       memoryManager
@@ -88,8 +85,15 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
     // usada para satisfazer a chamada.
   }
 
-  freeMemory = (memoryAddress) => {
-    message.success('livra '+ memoryAddress + ' pra mim ae')
+  freeMemory = (memoryAddresses) => {
+    message.success('livra '+ memoryAddresses + ' pra mim ae')
+    const { memoryManager} = this.state
+    memoryAddresses.map(memoryAddress => memoryManager.free(memoryAddress) )
+    debugger
+    this.setState({
+      ...this.state,
+      memoryManager
+    })
     // call memory manager #free passing index of memory block
   }
 
