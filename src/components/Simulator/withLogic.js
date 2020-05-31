@@ -13,7 +13,7 @@ const withConnect = Component => {
 export default Component => withConnect(props => {
   const [isDrawerVisible, setIsDrawerVisible] = useState(true)
   const coreList = useSelector(state => state.core.list)
-  const [whichAlg, setWhichAlg] = useState('')
+  const [whichAlg, setWhichAlg] = useState('FIFO')
 
   return (
     <Component

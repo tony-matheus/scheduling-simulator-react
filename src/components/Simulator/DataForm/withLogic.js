@@ -15,7 +15,7 @@ const withConnect = Component => {
 }
 
 const initialState = {
-  whichAlg: 'Round Robin',
+  whichAlg: 'FIFO',
   quantum: 4,
   coresNumber: 2,
   processesNumber: 3,

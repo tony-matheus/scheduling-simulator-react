@@ -30,7 +30,9 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       coreList: props.core.list,
       processList: props.process.list,
       terminatedProcessList: [],
-      memoryManager: new MemoryManager(100)
+      abortedProcessList: [],
+      lastPid: props.core.list.length + 1,
+      memoryManager: new MemoryManager(1000)
       // MemoryManagerSinalized
     }
   }
@@ -38,8 +40,8 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
   componentWillMount() {
     const interval = setInterval(() => {
       if ((Math.floor(Math.random() * 4) === 1) && !this.state.isDisableRandom) {
-        message.success('Random Process Added')
-        this.createProcess()
+        // message.success('Random Process Added')
+        // this.createProcess()
       }
     }, 3000)
     this.setState({
@@ -64,8 +66,12 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
   createProcess = () => {
     const process = new Process({
       id: this.state.processList.length,
-      name: 'Process ' + (this.state.processList.length + this.state.terminatedProcessList.length + 1),
+      name: 'Process ' + (this.state.lastPid + 1),
       state: 'ready',
+    })
+    this.setState({
+      ...this.state,
+      lastPid: this.state.lastPid + 1
     })
     return process
   }
@@ -79,17 +85,12 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       memoryManager
     })
     return memoryPointer
-
-    //     método que simula uma chamada de sistema por memória, tem como parâmetro um inteiro que representa a quantidade de memória
-    // solicitada em bytes. Tem como retorno o endereço do bloco de memória que foi
-    // usada para satisfazer a chamada.
   }
 
   freeMemory = (memoryAddresses) => {
-    message.success('livra '+ memoryAddresses + ' pra mim ae')
+    message.success(`livra o endereco ${memoryAddresses}  pra mim ae`)
     const { memoryManager} = this.state
     memoryAddresses.map(memoryAddress => memoryManager.free(memoryAddress) )
-    debugger
     this.setState({
       ...this.state,
       memoryManager
@@ -131,6 +132,8 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       coreList={this.state.coreList}
       processList={this.state.processList}
       terminatedProcessList={this.state.terminatedProcessList}
+      abortedProcessList={this.state.abortedProcessList}
+      //
       nextProcess={this.nextProcess}
       getProcess={this.getProcess}
       reOrderProcess={this.reOrderProcess}
@@ -146,6 +149,7 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       freeMemory={this.freeMemory}
       // Memory Manager Ui Data
       totalMemoryUsed={this.state.memoryManager.occupiedMemory}
+      memoryManager={this.state.memoryManager}
     />)
   }
 })

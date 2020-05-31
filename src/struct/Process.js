@@ -12,9 +12,11 @@ class Process {
     this.processInExecution = processInExecution
     this.state = state // ready running terminated
     const randNumber = this.randIntTime()
-    this.totalTIme = randNumber
-    this.remainingTime = randNumber
-    this.totalMemoryUsed = totalMemoryUsed
+    // this.totalTIme = randNumber
+    // this.remainingTime = randNumber
+    this.totalTIme = 3
+    this.remainingTime = 3
+    this.totalMemoryUsed = 0
     this.memoryPointers = []
   }
 
@@ -23,11 +25,15 @@ class Process {
   }
 
   generateRandomStaticMemoryCall = (callback = '') => {
-    this.totalMemoryUsed = this.randIntTime(1, 30)
+    this.totalMemoryUsed = this.randIntTime(100, 400)
     const memoryPointer = callback(this.totalMemoryUsed)
     if(memoryPointer || memoryPointer === 0){
       this.memoryPointers.push(memoryPointer)
+      return true
+    }else{
+      return false
     }
+
   }
   generateRandomDynamicMemoryCall = () => {
 

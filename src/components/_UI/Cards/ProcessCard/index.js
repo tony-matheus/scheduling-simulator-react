@@ -13,7 +13,7 @@ import {
   TimeCount
 } from './styles'
 
-const ProcessCard = ({ id, name, state, remainingTime, totalTIme, killProcess }) => {
+const ProcessCard = ({ id, name, state, remainingTime, totalTIme, totalMemoryUsed, killProcess }) => {
   return (
     <Container onClick={() => killProcess(id)}>
       <Wrapper>
@@ -28,9 +28,13 @@ const ProcessCard = ({ id, name, state, remainingTime, totalTIme, killProcess })
             <TimeText> Time Left</TimeText>
             <TimeCount> {remainingTime}s</TimeCount>
           </TimeColumn>
-          <TimeColumn state={state} isRight>
+          <TimeColumn state={state}>
             <TimeText> Total Time</TimeText>
             <TimeCount> {totalTIme}s</TimeCount>
+          </TimeColumn>
+          <TimeColumn state={state} isRight>
+            <TimeText> Memory </TimeText>
+            <TimeCount> {totalMemoryUsed}</TimeCount>
           </TimeColumn>
         </BottomWrapper>
       </Wrapper>

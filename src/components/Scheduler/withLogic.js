@@ -22,13 +22,14 @@ const withLogic = Component => withConnect(class extends React.Component {
 
     this.alertBarRef = React.createRef()
 
-    console.warn(props)
     this.state = {
       isDisableRandom: false,
       coreList: props.coreList,
       processList: props.processList,
       terminatedProcessList: props.terminatedProcessList,
-      randomInterval: ''
+      abortedProcessList: props.abortedProcessList,
+      randomInterval: '',
+      stopSchedule: false
     }
   }
 
@@ -55,9 +56,8 @@ const withLogic = Component => withConnect(class extends React.Component {
       let coreList = this.state.coreList;
       let processList = this.state.processList;
       let terminatedProcessList = this.state.terminatedProcessList;
-
       this.reOrderTimes(processList);
-
+      debugger
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy';
@@ -75,7 +75,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           terminatedProcessList.push(core.processInExecution);
           core.status = 'waiting';
           core.processInExecution = 'none';
-        } else if (core.processInExecution !== 'none') {
+        } else if (core.processInExecution !== 'none' && !this.state.stopSchedule) {
           core.processInExecution.remainingTime -= 1;
           core.processTimeLeft -= 1
         }
@@ -102,20 +102,28 @@ const withLogic = Component => withConnect(class extends React.Component {
       let coreList = this.state.coreList;
       let processList = this.state.processList;
       let terminatedProcessList = this.state.terminatedProcessList;
+      let abortedProcessList = this.state.abortedProcessList;
 
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy';
           if (core.processInExecution === 'none') {
             const process = this.getProcess(processList)
-            this.allocateProcessMemory(process)
-            console.warn(process.memoryPointers)
+            const processAllocationResponse = this.allocateProcessMemory(process)
+            if(processAllocationResponse){
+              core.processInExecution = process;
+              core.processTimeLeft = core.processInExecution.totalTIme;
+              core.status = 'busy';
+              core.processInExecution.state = 'running'
+            }else{
+              const index = processList.findIndex(p => p.id === process.id);
+              processList.splice(index, 1);
+              abortedProcessList.push(process);
+              core.status = 'waiting';
+            }
             // message.warn(process.memoryPointers[0])
             // Request for Memory
                // chamar malloc
-            core.processInExecution = process;
-            core.processTimeLeft = core.processInExecution.totalTIme;
-            core.processInExecution.state = 'running'
 
           }
         } else if (core.processInExecution.remainingTime === 0) {
@@ -128,7 +136,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           terminatedProcessList.push(core.processInExecution);
           core.status = 'waiting';
           core.processInExecution = 'none';
-        } else if (core.processInExecution !== 'none') {
+        } else if (core.processInExecution !== 'none' && !this.state.stopSchedule) {
           core.processInExecution.remainingTime -= 1;
           core.processTimeLeft -= 1
         }
@@ -138,13 +146,15 @@ const withLogic = Component => withConnect(class extends React.Component {
         this.setState({
           coreList,
           processList,
-          terminatedProcessList
+          terminatedProcessList,
+          abortedProcessList
         }, this.FIFO)
       } else {
         this.setState({
           coreList,
           processList,
-          terminatedProcessList
+          terminatedProcessList,
+          abortedProcessList
         })
       }
     }, 1000);
@@ -155,7 +165,7 @@ const withLogic = Component => withConnect(class extends React.Component {
       let coreList = this.state.coreList
       let processList = this.state.processList
       let terminatedProcessList = this.state.terminatedProcessList
-
+      debugger
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy'
@@ -248,6 +258,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           ...this.state.processList,
           process
         ]
+      // }, (this.props.whichAlg === "Round Robin") ? this.roundRobin : (this.props.whichAlg === "FIFO") ? this.FIFO : this.SJF)
       }, (this.props.whichAlg === "Round Robin") ? this.roundRobin : (this.props.whichAlg === "FIFO") ? this.FIFO : this.SJF)
     } else {
       this.setState({
@@ -284,6 +295,14 @@ const withLogic = Component => withConnect(class extends React.Component {
     })
   }
 
+  changeScheduleProcess = () => {
+    console.log(this.state.stopSchedule)
+    this.setState({
+      ...this.state,
+      stopSchedule: !this.state.stopSchedule
+    })
+  }
+
   render() {
     return (
       <Component
@@ -292,8 +311,11 @@ const withLogic = Component => withConnect(class extends React.Component {
         coreList={this.state.coreList}
         processList={this.state.processList}
         terminatedList={this.state.terminatedProcessList}
+        abortedProcessList={this.state.abortedProcessList}
         onAddProcess={this.addNewProcess}
         killProcess={this.killProcess}
+        changeScheduleProcess={this.changeScheduleProcess}
+        stopSchedule={this.state.stopSchedule}
       />
     )
   }

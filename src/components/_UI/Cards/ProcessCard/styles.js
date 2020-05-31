@@ -3,7 +3,7 @@ import theme from '../../../../utils/theme'
 
 export const Container = styled.div`
   cursor: pointer;
-  width: 182px;
+  width: 220px;
   height: 87px;
   background-color: ${theme.dark.black};
   border-radius: 10px;

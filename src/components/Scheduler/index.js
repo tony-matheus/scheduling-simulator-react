@@ -18,6 +18,12 @@ export const DisableProcessButton = styled(Button)`
   right: 30px;
 `
 
+export const StopSchedulerButton = styled(Button)`
+  position: fixed;
+  top: 240px;
+  right: 30px;
+`
+
 export const Container = styled.div`
   display: flex;
 `
@@ -26,11 +32,23 @@ export const Column = styled.div`
   width: 50%;
 `
 
-const Scheduler = ({ coreList, processList, killProcess, terminatedList, onAddProcess, isDisableRandom, setIsDisableRandom }) => {
+const Scheduler = ({
+  coreList,
+  processList,
+  changeScheduleProcess,
+  killProcess,
+  stopSchedule,
+  terminatedList,
+  abortedProcessList,
+  onAddProcess,
+  isDisableRandom,
+  setIsDisableRandom
+}) => {
   return (
     <>
       <NewProcessButton onClick={onAddProcess}> <PlusOutlined /> Add New Process</NewProcessButton>
       <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>{(isDisableRandom) ? 'Enable' : 'Disable'} Random Process</DisableProcessButton>
+      <StopSchedulerButton onClick={changeScheduleProcess}>{stopSchedule ? 'Start' : 'Stop'} Scheduler </StopSchedulerButton>
 
       <CoreList coreList={coreList} />
       <Container>
@@ -38,7 +56,10 @@ const Scheduler = ({ coreList, processList, killProcess, terminatedList, onAddPr
           <ProcessList killProcess={killProcess} processList={processList.filter(proc => proc.state !== 'running')} />
         </Column>
         <Column>
-          <ProcessList processList={terminatedList} title='Finish Process' />
+          <ProcessList processList={terminatedList.reverse()} title='Finish Process' />
+        </Column>
+        <Column>
+          <ProcessList processList={abortedProcessList.reverse()} title='Aborted Processes' />
         </Column>
       </Container>
     </>
