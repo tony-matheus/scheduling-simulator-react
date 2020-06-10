@@ -20,12 +20,14 @@ class Process {
     this.memoryPointers = []
   }
 
-  randIntTime = (min = 1 , max = 20) => {
-    return Math.floor(Math.random() * (max-min+1) + min);
+  randIntTime = (min = 1 , max = 12) => {
+    // return Math.floor(Math.random() * (max-min+1) + min);
+  return Math.pow(2,Math.floor(Math.random() * (max - min) + min));
+
   }
 
   generateRandomStaticMemoryCall = (callback = '') => {
-    this.totalMemoryUsed = this.randIntTime(100, 400)
+    this.totalMemoryUsed = this.randIntTime(1, 12)
     const memoryPointer = callback(this.totalMemoryUsed)
     if(memoryPointer || memoryPointer === 0){
       this.memoryPointers.push(memoryPointer)
