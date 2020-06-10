@@ -13,7 +13,7 @@ class MemoryManager {
         // quick fit info
         this.statisticTable = []
         this.quickFitFreeBlocks = []
-        this.numberQuickLists = 0
+        this.numberQuickLists = 3
         this.minimumAmountCalls = 0
     }
 
@@ -120,22 +120,76 @@ class MemoryManager {
     }
 
     quickFit = (requiredMemory) => {
+        this.minimumAmountCalls += 1;
+        if (!this.checkFreeMemory(requiredMemory)) {
+            return false
+        }
         if (this.minimumAmountCalls <= 10) {
-            if (this.statisticTable.length === 0) this.statisticTable.push({requiredMemory: requiredMemory, occurrences: 1})
+            if (this.statisticTable.length === 0) this.statisticTable.push({
+                requiredMemory: requiredMemory,
+                occurrences: 0
+            });
+            let flag = 0;
             for (let count = 0; count < this.statisticTable.length; count++) {
                 if (this.statisticTable[count].requiredMemory === requiredMemory) {
                     this.statisticTable[count].occurrences += 1;
+                    flag = 1;
+                    break;
                 }
             }
-
-            this.minimumAmountCalls = this.statisticTable.length;
-            console.log(this.minimumAmountCalls);
-            console.log(this.statisticTable);
+            if (flag !== 1) {
+                this.statisticTable.push({requiredMemory: requiredMemory, occurrences: 1});
+            }
+            // console.log(this.minimumAmountCalls);
+            // console.log(this.statisticTable);
             return this.firstFit(requiredMemory);
-        }
-        // quick fit em si
+        } else {
+            // quick fit em si
+            let statisticTableByOccurrences = this.statisticTable.slice(0);
+            statisticTableByOccurrences.sort(function (a, b) {
+                return b.occurrences - a.occurrences;
+            });
 
+            // TODO: Criar listas com a tabela e lincar com os blocos de memória
+            let lists = statisticTableByOccurrences.splice(0, this.numberQuickLists);
+
+            // lists =  this.insertBlockIndexes(lists);
+            console.log(lists);
+            // if (this.freeBlockList || this.freeBlockList === 0) {
+            //     const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists)
+            //     console.log(freeBlockIndex);
+            //     if (!freeBlockIndex && freeBlockIndex !== 0) {
+            //         return this.tryCreateMemoryBlock(requiredMemory)
+            //     }
+            //
+            //     return this.updateFreeBlock(freeBlockIndex, requiredMemory)
+            // }
+            //
+            // return this.tryCreateMemoryBlock(requiredMemory)
+        }
     }
+
+    // insertBlockIndexes = (lists, index = this.freeBlockList) => {
+    //     for (let count = 0; count < this.numberQuickLists; count++) {
+    //         if (this.memory[index].totalMemory === lists[count].requiredMemory){
+    //             lists[count].index = this.freeBlockList;
+    //         }
+    //     }
+    //     if(this.memory[index].nextFreeBlock) return this.insertBlockIndexes(lists, this.memory[index].nextFreeBlock);
+    //     return lists;
+    // }
+    //
+    // checkBlockSizeList = (requiredMemory, lists, index = this.freeBlockList) => {
+    //     for (let count = 0; count < this.numberQuickLists; count++) {
+    //         if (lists[count].requiredMemory === requiredMemory) {
+    //             return lists[count].index;
+    //         }
+    //     }
+    //     if (!this.checkFreeMemory(requiredMemory)) {
+    //         return false;
+    //     }
+    //     return this.firstFit(requiredMemory);
+    // }
 
     tryCreateMemoryBlock = (requiredMemory) => {
         if (!this.checkCanCreateNewBlock(requiredMemory)) {
