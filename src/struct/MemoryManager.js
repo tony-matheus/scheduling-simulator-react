@@ -1,25 +1,36 @@
 import MemoryBlock from './MemoryBlock'
 
 class MemoryManager {
-    constructor(totalInstalledMemory) {
+    constructor({
+        totalInstalledMemory,
+        memoryAllocationAlg,
+        numberQuickList,
+        numberMemoryCalls
+    }) {
         this.memory = []
         this.freeBlockList = null
         this.totalMemory = totalInstalledMemory
         this.memoryOverHead = 0
         this.availableMemory = totalInstalledMemory
         this.occupiedMemory = 0
-        this.memoryAlgorith = 'First Fit'
-
+        this.memoryAlgorith = memoryAllocationAlg
+        this.actualPid = ''
         // quick fit info
         this.statisticTable = []
         this.quickFitFreeBlocks = []
-        this.numberQuickLists = 3
-        this.minimumAmountCalls = 0
+        this.numberQuickLists = numberQuickList
+        this.minimumAmountCalls = numberMemoryCalls
     }
 
-    malloc = (requiredMemory) => {
-        switch (this.memoryAlgorith) {
-            case 'First Fit':
+    malloc = (requiredMemory, pid) => {
+        debugger
+        this.actualPid = pid
+        switch (this.memoryAlgorith.toLowerCase()) {
+            case 'first fit':
+                return this.firstFit(requiredMemory)
+            case 'best fit':
+                return this.bestFit(requiredMemory)
+            case 'quick fit':
                 return this.quickFit(requiredMemory)
             default:
                 break;
@@ -138,7 +149,7 @@ class MemoryManager {
                 }
             }
             if (flag !== 1) {
-                this.statisticTable.push({requiredMemory: requiredMemory, occurrences: 1});
+                this.statisticTable.push({ requiredMemory: requiredMemory, occurrences: 1 });
             }
             // console.log(this.minimumAmountCalls);
             // console.log(this.statisticTable);
@@ -200,8 +211,10 @@ class MemoryManager {
             totalBlockSize: requiredMemory,
             occupiedSize: requiredMemory,
             blockId: this.memory.length,
-            nextFreeBlock: null
+            nextFreeBlock: null,
+            pid: this.actualPid
         })
+        this.actualPid = ''
         this.memory.push(memoryBlock)
         this.addMemoryInformation(requiredMemory)
         return this.memory.length - 1
@@ -230,7 +243,6 @@ class MemoryManager {
         this.memory[freeBlockIndex].occupiedSize += requiredMemory
         const nextFreeblock = this.memory[freeBlockIndex].nextFreeBlock
         if (nextFreeblock || nextFreeblock === 0) {
-            debugger
             this.freeBlockList = nextFreeblock
         }
         this.memory[freeBlockIndex].nextFreeBlock = null
@@ -244,7 +256,6 @@ class MemoryManager {
         // let freeBlock = null
         this.memory.map((memoryBlock, index) => {
             if (!this.freeBlockList && this.freeBlockList !== 0 && memoryBlock.occupiedSize === 0) {
-                debugger
                 this.freeBlockList = index
             }
         })
@@ -260,7 +271,6 @@ class MemoryManager {
                 }
             })
         }
-        debugger
         this.freeBlockList = freeBlocksList[0].blockId
     }
 

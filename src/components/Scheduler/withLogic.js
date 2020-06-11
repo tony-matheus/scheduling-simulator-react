@@ -34,21 +34,20 @@ const withLogic = Component => withConnect(class extends React.Component {
   }
 
   componentWillMount() {
-    this.FIFO()
-    // switch (this.props.whichAlg) {
-    //   case 'Round Robin':
-    //     this.roundRobin()
-    //     break;
-    //   case 'SJF':
-    //     this.SJF()
-    //     break;
-    //   case 'FIFO':
-    //     this.FIFO()
-    //     break;
-    //   default:
-    //     this.roundRobin()
-    //     break;
-    // }
+    switch (this.props.whichAlg) {
+      case 'Round Robin':
+        this.roundRobin()
+        break;
+      case 'SJF':
+        this.SJF()
+        break;
+      case 'FIFO':
+        this.FIFO()
+        break;
+      default:
+        this.roundRobin()
+        break;
+    }
   }
 
   SJF = () => {
@@ -56,15 +55,28 @@ const withLogic = Component => withConnect(class extends React.Component {
       let coreList = this.state.coreList;
       let processList = this.state.processList;
       let terminatedProcessList = this.state.terminatedProcessList;
+      let abortedProcessList = this.state.abortedProcessList;
       this.reOrderTimes(processList);
-      debugger
+
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy';
           if (core.processInExecution === 'none') {
-            core.processInExecution = this.getProcess(processList);
-            core.processTimeLeft = core.processInExecution.totalTIme;
-            core.processInExecution.state = 'running'
+            const process = this.getProcess(processList)
+            const processAllocationResponse = this.allocateProcessMemory(process)
+            if(processAllocationResponse) {
+              core.processInExecution = process;
+              core.processTimeLeft = core.processInExecution.totalTIme;
+              core.processInExecution.state = 'running'
+            }else{
+              const index = processList.findIndex(p => p.id === process.id);
+              processList.splice(index, 1);
+              abortedProcessList.push(process);
+              core.status = 'waiting';
+            }
+            // core.processInExecution = this.getProcess(processList);
+            // core.processTimeLeft = core.processInExecution.totalTIme;
+            // core.processInExecution.state = 'running'
           }
         } else if (core.processInExecution.remainingTime === 0) {
           core.processInExecution.state = 'terminated';
@@ -72,6 +84,8 @@ const withLogic = Component => withConnect(class extends React.Component {
             return p.id === core.processInExecution.id
           });
           processList.splice(index, 1);
+
+          this.freeMemoryProcess(core.processInExecution)
           terminatedProcessList.push(core.processInExecution);
           core.status = 'waiting';
           core.processInExecution = 'none';
@@ -165,13 +179,25 @@ const withLogic = Component => withConnect(class extends React.Component {
       let coreList = this.state.coreList
       let processList = this.state.processList
       let terminatedProcessList = this.state.terminatedProcessList
-      debugger
+      let abortedProcessList = this.state.abortedProcessList;
+
       coreList.forEach((core, index) => {
         if (core.status === 'waiting' && this.nextProcess(processList)) {
           core.status = 'busy'
           if (core.processInExecution === 'none') {
-            core.processInExecution = this.getProcess(processList)
-            core.processInExecution.state = 'running'
+            const process = this.getProcess(processList)
+            const processAllocationResponse = this.allocateProcessMemory(process)
+            if(processAllocationResponse){
+              core.processInExecution = process
+              core.processInExecution.state = 'running'
+            }else{
+              const index = processList.findIndex(p => p.id === process.id);
+              processList.splice(index, 1);
+              abortedProcessList.push(process);
+              core.status = 'waiting';
+            }
+            // core.processInExecution = this.getProcess(processList)
+            // core.processInExecution.state = 'running'
           }
         } else if (core.processTimeLeft === 0 || core.processInExecution.remainingTime <= 0) {
           if (core.processInExecution.remainingTime <= 0) {
@@ -180,9 +206,12 @@ const withLogic = Component => withConnect(class extends React.Component {
               return p.id === core.processInExecution.id
             });
             processList.splice(index, 1)
+
+            this.freeMemoryProcess(core.processInExecution)
             terminatedProcessList.push(core.processInExecution)
           } else {
             core.processInExecution.state = 'ready'
+            this.freeMemoryProcess(core.processInExecution)
             this.reOrderProcess(processList, core.processInExecution)
           }
           core.status = 'waiting'

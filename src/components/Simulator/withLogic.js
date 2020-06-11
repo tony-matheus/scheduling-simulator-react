@@ -14,6 +14,9 @@ export default Component => withConnect(props => {
   const [isDrawerVisible, setIsDrawerVisible] = useState(true)
   const coreList = useSelector(state => state.core.list)
   const [whichAlg, setWhichAlg] = useState('FIFO')
+  const [data, setData] = useState({
+
+  })
 
   return (
     <Component
@@ -22,6 +25,8 @@ export default Component => withConnect(props => {
       showScheduler={(coreList.length > 0)}
       changeWhichAlg={setWhichAlg}
       whichAlg={whichAlg}
+      data={data}
+      setData={setData}
     />
   )
 })

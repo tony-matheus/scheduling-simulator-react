@@ -9,7 +9,7 @@ import {
 } from './styles'
 import Kernel from '../Kernel'
 
-const Simulator = ({ isDrawerVisible, setIsDrawerVisible, showScheduler, changeWhichAlg, whichAlg }) => {
+const Simulator = ({ isDrawerVisible, data, setIsDrawerVisible, showScheduler, changeWhichAlg, whichAlg, setData }) => {
   return (
     <Container>
       <NewSimulationButton type='primary' onClick={() => setIsDrawerVisible(true)}>
@@ -24,12 +24,12 @@ const Simulator = ({ isDrawerVisible, setIsDrawerVisible, showScheduler, changeW
           <div />
         }
       >
-        <DataForm changeWhichAlg={changeWhichAlg} closeDrawer={() => setIsDrawerVisible(false)} />
+        <DataForm changeWhichAlg={changeWhichAlg} setData={setData} closeDrawer={() => setIsDrawerVisible(false)} />
       </Drawer>
       {/* {showScheduler &&
         <Scheduler whichAlg={whichAlg} />} */}
       {showScheduler &&
-        <Kernel whichAlg={whichAlg} />}
+        <Kernel whichAlg={whichAlg} {...data} />}
     </Container>
   )
 }

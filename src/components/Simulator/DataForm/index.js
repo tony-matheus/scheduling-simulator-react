@@ -22,7 +22,7 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
       label: 'Algoritmo de Alocacao de memoria',
       name: 'memoryAllocationAlg',
       isSelect: true,
-      selectFields: ['quick fit']
+      selectFields: ['First Fit', 'Best Fit', 'Quick fit']
     },
     {
       label: 'Número de Quantum',
@@ -74,7 +74,6 @@ const DataForm = ({ onChange, onSelectAlg, state, onClose, onClear, onStartSimul
                 name={field.name}
                 placeholder='Selecione uma opção'
                 data={field.selectFields}
-                defaultValue='FIFO'
                 noPosition
                 isLeft={false}
               />

@@ -50,7 +50,7 @@ const MemoryBlockCard = ({ index = 1, size, occupiedSize, status, pid, blockId, 
       <TopWrapper status={status}>
         <TextWrapper>
           <Title>%</Title>
-          <SubTitle>{Math.ceil(occupiedSize / totalBlockSize) * 100}%</SubTitle>
+          <SubTitle>{size}%</SubTitle>
         </TextWrapper>
       </TopWrapper>
     </Container>

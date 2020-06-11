@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import Process from '../../struct/Process'
 import MemoryManager from '../../struct/MemoryManager'
 import { message } from 'antd'
-import Kernel from '.'
+
 const withConnect = Component => {
   const mapStateToProps = state => (
     {
@@ -24,7 +24,7 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
     super(props)
 
     this.alertBarRef = React.createRef()
-
+    console.log(props)
     this.state = {
       isDisableRandom: false,
       coreList: props.core.list,
@@ -32,7 +32,7 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
       terminatedProcessList: [],
       abortedProcessList: [],
       lastPid: props.core.list.length + 1,
-      memoryManager: new MemoryManager(1000)
+      memoryManager: new MemoryManager(props)
       // MemoryManagerSinalized
     }
   }
@@ -76,9 +76,9 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
     return process
   }
 
-  memoryAllocation = (requiredMemory) => {
+  memoryAllocation = (requiredMemory, pid) => {
     const { memoryManager} = this.state
-    const memoryPointer = memoryManager.malloc(requiredMemory)
+    const memoryPointer = memoryManager.malloc(requiredMemory, pid)
     // TODO: Visual Part
     this.setState({
       ...this.state,

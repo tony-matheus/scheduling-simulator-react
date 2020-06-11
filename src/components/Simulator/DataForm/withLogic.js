@@ -21,8 +21,8 @@ const initialState = {
   processesNumber: 3,
   numberQuickList: 2,
   numberMemoryCalls: 2,
-  memoryAllocationAlg: 'quick fit',
-  totalInstalledMemory: 100 // one million
+  memoryAllocationAlg: 'first fit',
+  totalInstalledMemory: 1000 // one million
 }
 
 export default Component => withConnect(props => {
@@ -56,6 +56,7 @@ export default Component => withConnect(props => {
   }
 
   const handleStartSimulation = () => {
+    props.setData(state)
     if ((state.quantum < 2 || state.quantum > 20) || state.quantum === '') {
       return message.error('Numero de cores deve ser maior que 1 menor que 21')
     }

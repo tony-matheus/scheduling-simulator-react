@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import MemoryBlockCard from '../_UI/MemoryBlock'
 
 export const Container = styled.div`
-  padding: 10px 0;
+  padding: 10px;
 `
 export const Wrapper = styled.div`
   padding: 10px;
@@ -32,7 +32,6 @@ const MemoryManagerUi = ({ memoryManager }) => {
     <Container>
       <TitleWrapper>
         <Title>Memory List {memoryManager.totalMemory} </Title>
-        {console.error(memoryManager.freeBlockList)}
         <Title>First Free Block {memoryManager.freeBlockList} </Title>
       </TitleWrapper>
       <List>
