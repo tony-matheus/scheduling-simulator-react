@@ -8,6 +8,7 @@ class MemoryBlock {
   }
 
   acceptMemoryRequest = (requiredMemory) => (this.totalBlockSize >= requiredMemory && (this.totalBlockSize - this.occupiedSize ) >= requiredMemory)
+  isEqualMemoryRequest = (requiredMemory) => (this.totalBlockSize === requiredMemory && (this.totalBlockSize - this.occupiedSize ) === requiredMemory)
 }
 
 export default MemoryBlock

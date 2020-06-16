@@ -2,11 +2,11 @@ import MemoryBlock from './MemoryBlock'
 
 class MemoryManager {
     constructor({
-        totalInstalledMemory,
-        memoryAllocationAlg,
-        numberQuickList,
-        numberMemoryCalls
-    }) {
+                    totalInstalledMemory,
+                    memoryAllocationAlg,
+                    numberQuickList,
+                    numberMemoryCalls
+                }) {
         this.memory = []
         this.freeBlockList = null
         this.totalMemory = totalInstalledMemory
@@ -20,6 +20,7 @@ class MemoryManager {
         this.quickFitFreeBlocks = []
         this.numberQuickLists = numberQuickList
         this.minimumAmountCalls = numberMemoryCalls
+        this.counterCalls = 0
     }
 
     malloc = (requiredMemory, pid) => {
@@ -131,11 +132,11 @@ class MemoryManager {
     }
 
     quickFit = (requiredMemory) => {
-        this.minimumAmountCalls += 1;
+        this.counterCalls += 1;
         if (!this.checkFreeMemory(requiredMemory)) {
             return false
         }
-        if (this.minimumAmountCalls <= 10) {
+        if (this.counterCalls <= this.minimumAmountCalls) {
             if (this.statisticTable.length === 0) this.statisticTable.push({
                 requiredMemory: requiredMemory,
                 occurrences: 0
@@ -149,10 +150,8 @@ class MemoryManager {
                 }
             }
             if (flag !== 1) {
-                this.statisticTable.push({ requiredMemory: requiredMemory, occurrences: 1 });
+                this.statisticTable.push({requiredMemory: requiredMemory, occurrences: 1});
             }
-            // console.log(this.minimumAmountCalls);
-            // console.log(this.statisticTable);
             return this.firstFit(requiredMemory);
         } else {
             // quick fit em si
@@ -161,46 +160,50 @@ class MemoryManager {
                 return b.occurrences - a.occurrences;
             });
 
-            // TODO: Criar listas com a tabela e lincar com os blocos de memória
+            // TODO: Criar listas com a tabela e lincar com os blocos de memória (DONE)
+            if (this.numberQuickLists > 11 || this.numberQuickLists === undefined || this.numberQuickLists === 0){
+                (this.numberQuickLists > this.statisticTable.length) ? this.numberQuickLists = this.statisticTable.length : this.numberQuickLists = 3;
+            }
+
             let lists = statisticTableByOccurrences.splice(0, this.numberQuickLists);
 
-            // lists =  this.insertBlockIndexes(lists);
             console.log(lists);
-            // if (this.freeBlockList || this.freeBlockList === 0) {
-            //     const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists)
-            //     console.log(freeBlockIndex);
-            //     if (!freeBlockIndex && freeBlockIndex !== 0) {
-            //         return this.tryCreateMemoryBlock(requiredMemory)
-            //     }
-            //
-            //     return this.updateFreeBlock(freeBlockIndex, requiredMemory)
-            // }
-            //
-            // return this.tryCreateMemoryBlock(requiredMemory)
+
+            if (this.freeBlockList || this.freeBlockList === 0) {
+                const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists,0)
+                console.log(freeBlockIndex);
+                if (!freeBlockIndex && freeBlockIndex !== 0) {
+                    return this.tryCreateMemoryBlock(requiredMemory)
+                }
+
+                return this.updateFreeBlock(freeBlockIndex, requiredMemory)
+            }
+
+            return this.tryCreateMemoryBlock(requiredMemory)
         }
     }
 
-    // insertBlockIndexes = (lists, index = this.freeBlockList) => {
-    //     for (let count = 0; count < this.numberQuickLists; count++) {
-    //         if (this.memory[index].totalMemory === lists[count].requiredMemory){
-    //             lists[count].index = this.freeBlockList;
-    //         }
-    //     }
-    //     if(this.memory[index].nextFreeBlock) return this.insertBlockIndexes(lists, this.memory[index].nextFreeBlock);
-    //     return lists;
-    // }
-    //
-    // checkBlockSizeList = (requiredMemory, lists, index = this.freeBlockList) => {
-    //     for (let count = 0; count < this.numberQuickLists; count++) {
-    //         if (lists[count].requiredMemory === requiredMemory) {
-    //             return lists[count].index;
-    //         }
-    //     }
-    //     if (!this.checkFreeMemory(requiredMemory)) {
-    //         return false;
-    //     }
-    //     return this.firstFit(requiredMemory);
-    // }
+    checkBlockSizeList = (requiredMemory, lists, flag, index = this.freeBlockList) => {
+        for (let count = 0; count < this.numberQuickLists; count++) {
+            if (lists[count].requiredMemory === requiredMemory) { // lista - 4 \ req - 4
+                if (this.memory[index].isEqualMemoryRequest(requiredMemory)) { // req = tamanho do bloco ?
+                    return index;
+                }
+                if (this.memory[index].nextFreeBlock)
+                    return this.checkBlockSizeList(requiredMemory, lists, 1, this.memory[index].nextFreeBlock)
+            }
+        }
+        if(flag === 0) {
+            for (let positionOfMemory = 0; positionOfMemory < this.memory.length; positionOfMemory++) {
+                for (let numberOfList = 0; numberOfList < this.numberQuickLists; numberOfList++) {
+                    if (this.memory[positionOfMemory].acceptMemoryRequest(requiredMemory) && this.memory[positionOfMemory].totalBlockSize !== lists[numberOfList].requiredMemory)
+                        return positionOfMemory
+                }
+            }
+        }
+
+        return false
+    }
 
     tryCreateMemoryBlock = (requiredMemory) => {
         if (!this.checkCanCreateNewBlock(requiredMemory)) {
