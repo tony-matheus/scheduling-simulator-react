@@ -78,7 +78,7 @@ const withLogic = Component => withConnect(class extends React.Component {
             // core.processTimeLeft = core.processInExecution.totalTIme;
             // core.processInExecution.state = 'running'
           }
-        } else if (core.processInExecution.remainingTime === 0) {
+        } else if (core.processInExecution.remainingTime === 0 && !this.state.stopSchedule) {
           core.processInExecution.state = 'terminated';
           const index = processList.findIndex(p => {
             return p.id === core.processInExecution.id
@@ -211,13 +211,13 @@ const withLogic = Component => withConnect(class extends React.Component {
             terminatedProcessList.push(core.processInExecution)
           } else {
             core.processInExecution.state = 'ready'
-            this.freeMemoryProcess(core.processInExecution)
+            // this.freeMemoryProcess(core.processInExecution)
             this.reOrderProcess(processList, core.processInExecution)
           }
           core.status = 'waiting'
           core.processInExecution = 'none'
           core.processTimeLeft = core.quantum
-        } else if (core.processInExecution !== 'none') {
+        } else if (core.processInExecution !== 'none' && !this.state.stopSchedule) {
           core.processInExecution.remainingTime -= 1
           core.processTimeLeft -= 1
         }

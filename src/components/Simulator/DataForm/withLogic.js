@@ -16,9 +16,9 @@ const withConnect = Component => {
 
 const initialState = {
   whichAlg: 'FIFO',
-  quantum: 4,
-  coresNumber: 2,
-  processesNumber: 3,
+  quantum: 2,
+  coresNumber: 1,
+  processesNumber: 100,
   numberQuickList: 2,
   numberMemoryCalls: 2,
   memoryAllocationAlg: 'first fit',
@@ -58,10 +58,10 @@ export default Component => withConnect(props => {
   const handleStartSimulation = () => {
     props.setData(state)
     if ((state.quantum < 2 || state.quantum > 20) || state.quantum === '') {
-      return message.error('Numero de cores deve ser maior que 1 menor que 21')
+      return message.error('Numero de Quantum deve ser maior que 1 menor que 21')
     }
 
-    if ((state.coresNumber < 1 || state.coresNumber > 64) && state.coresNumber === '') {
+    if ((state.coresNumber <= 1 || state.coresNumber > 64) && state.coresNumber === '') {
       return message.error('Numero de cores deve ser maior que 0 menor que 64')
     }
 
