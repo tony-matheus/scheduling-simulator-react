@@ -191,6 +191,7 @@ const withLogic = Component => withConnect(class extends React.Component {
               core.processInExecution = process
               core.processInExecution.state = 'running'
             }else{
+              console.log('pegou abortados')
               const index = processList.findIndex(p => p.id === process.id);
               processList.splice(index, 1);
               abortedProcessList.push(process);
@@ -208,6 +209,7 @@ const withLogic = Component => withConnect(class extends React.Component {
             processList.splice(index, 1)
 
             this.freeMemoryProcess(core.processInExecution)
+            console.log('terminou o processo')
             terminatedProcessList.push(core.processInExecution)
           } else {
             core.processInExecution.state = 'ready'

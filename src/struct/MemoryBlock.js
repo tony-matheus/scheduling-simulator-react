@@ -7,7 +7,7 @@ class MemoryBlock {
     this.pid = pid
   }
 
-  acceptMemoryRequest = (requiredMemory) => (this.totalBlockSize >= requiredMemory && (this.totalBlockSize - this.occupiedSize ) >= requiredMemory)
+  acceptMemoryRequest = (requiredMemory) => (this.totalBlockSize >= requiredMemory && (this.totalBlockSize ) >= requiredMemory)
   isEqualMemoryRequest = (requiredMemory) => (this.totalBlockSize === requiredMemory && (this.totalBlockSize - this.occupiedSize ) === requiredMemory)
 }
 

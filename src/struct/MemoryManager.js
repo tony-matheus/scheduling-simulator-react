@@ -83,7 +83,7 @@ class MemoryManager {
 
     checkFirstFreeMemory = (requiredMemory, index = this.freeBlockList) => {
         // console.log(index)
-        if (this.memory[index].acceptMemoryRequest(requiredMemory))
+        if (this.memory[index].acceptMemoryRequest(requiredMemory) && this.memory[index].occupiedSize === 0)
             return index
 
         if (this.memory[index].nextFreeBlock)
@@ -249,6 +249,7 @@ class MemoryManager {
             this.freeBlockList = nextFreeblock
         }
         this.memory[freeBlockIndex].nextFreeBlock = null
+        this.memory[freeBlockIndex].pid = this.actualPid
         this.addMemoryInformation(requiredMemory)
 
         return freeBlockIndex

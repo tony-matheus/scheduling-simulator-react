@@ -2,7 +2,7 @@ import styled from 'styled-components/macro'
 import theme from '../../../utils/theme'
 
 export const Container = styled.div`
-  width: ${({ size }) => `${(size || '10')}%;`};
+  /* width: ${({ size }) => `${(size || '10')}%;`}; */
   background-color: ${theme.dark.black};
   border-radius: 2px;
   display: flex;
@@ -11,8 +11,8 @@ export const Container = styled.div`
   margin-right: 10px;
   padding: 14px;
   text-align: center;
-  min-width: 90px;
-
+  /* min-width: 90px; */
+  width: 90px;
   & > * {
     padding-top: 14px;
     padding-bottom: 14px;
