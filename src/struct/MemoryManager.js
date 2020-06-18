@@ -164,6 +164,7 @@ class MemoryManager {
             }
 
             let lists = statisticTableByOccurrences.splice(0, this.numberQuickLists);
+            lists =  this.insertBlockIndexes(lists);
 
             console.log(lists);
 
@@ -179,6 +180,16 @@ class MemoryManager {
 
             return this.tryCreateMemoryBlock(requiredMemory)
         }
+    }
+
+    insertBlockIndexes = (lists, index = this.freeBlockList) => {
+        for (let count = 0; count < this.numberQuickLists; count++) {
+            if (this.memory[index].totalMemory === lists[count].requiredMemory){
+                lists[count].index = this.freeBlockList;
+            }
+        }
+        if(this.memory[index].nextFreeBlock) return this.insertBlockIndexes(lists, this.memory[index].nextFreeBlock);
+        return lists;
     }
 
     checkBlockSizeList = (requiredMemory, lists, flag, index = this.freeBlockList) => {
