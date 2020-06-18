@@ -12,9 +12,9 @@ import Kernel from '../Kernel'
 const Simulator = ({ isDrawerVisible, data, setIsDrawerVisible, showScheduler, changeWhichAlg, whichAlg, setData }) => {
   return (
     <Container>
-      <NewSimulationButton type='primary' onClick={() => setIsDrawerVisible(true)}>
+      {/* <NewSimulationButton type='primary' onClick={() => setIsDrawerVisible(true)}>
         <PlusOutlined /> New Simulation
-      </NewSimulationButton>
+      </NewSimulationButton> */}
       <Drawer
         title='Formulário para nova Simulação'
         width={500}

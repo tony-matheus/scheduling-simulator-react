@@ -29,8 +29,15 @@ const withLogic = Component => withConnect(class extends React.Component {
       terminatedProcessList: props.terminatedProcessList,
       abortedProcessList: props.abortedProcessList,
       randomInterval: '',
-      stopSchedule: false
+      stopSchedule: false,
+      time: 1000
     }
+  }
+
+  changeTime = (value) => {
+    this.setState({
+      time: value
+    })
   }
 
   componentWillMount() {
@@ -108,7 +115,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           terminatedProcessList
         })
       }
-    }, 1000)
+    }, this.state.time)
   };
 
   FIFO = () => {
@@ -171,7 +178,7 @@ const withLogic = Component => withConnect(class extends React.Component {
           abortedProcessList
         })
       }
-    }, 1000);
+    }, this.state.time);
   };
 
   roundRobin = () => {
@@ -244,7 +251,7 @@ const withLogic = Component => withConnect(class extends React.Component {
         })
       }
 
-    }, 1000)
+    }, this.state.time)
   }
 
   allocateProcessMemory = (process) => process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
@@ -327,10 +334,11 @@ const withLogic = Component => withConnect(class extends React.Component {
   }
 
   changeScheduleProcess = () => {
-    console.log(this.state.stopSchedule)
+    const newTime = this.state.stopSchedule ? 500 : 1000000
     this.setState({
       ...this.state,
-      stopSchedule: !this.state.stopSchedule
+      stopSchedule: !this.state.stopSchedule,
+      time: newTime
     })
   }
 
@@ -347,6 +355,9 @@ const withLogic = Component => withConnect(class extends React.Component {
         killProcess={this.killProcess}
         changeScheduleProcess={this.changeScheduleProcess}
         stopSchedule={this.state.stopSchedule}
+
+        changeTime={this.changeTime}
+        time={this.state.time}
       />
     )
   }

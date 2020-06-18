@@ -50,9 +50,6 @@ const Kernel = ({
   return (
     <>
       <MemoryManagerUI memoryManager={memoryManager} totalMemoryUsed={totalMemoryUsed} />
-      <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>
-        {(isDisableRandom) ? 'Enable' : 'Disable'} Random Process
-      </DisableProcessButton>
       <Scheduler
         whichAlg={whichAlg}
         kernelCreateProcess={createProcess}

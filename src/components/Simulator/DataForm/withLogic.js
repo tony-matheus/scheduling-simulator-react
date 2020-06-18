@@ -22,7 +22,7 @@ const initialState = {
   numberQuickList: 2,
   numberMemoryCalls: 2,
   memoryAllocationAlg: 'first fit',
-  totalInstalledMemory: 1000 // one million
+  totalInstalledMemory: 10000 // one million
 }
 
 export default Component => withConnect(props => {

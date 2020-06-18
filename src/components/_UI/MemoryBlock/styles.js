@@ -5,18 +5,16 @@ export const Container = styled.div`
   /* width: ${({ size }) => `${(size || '10')}%;`}; */
   background-color: ${theme.dark.black};
   border-radius: 2px;
+  margin-botton: 10px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-right: 10px;
+  margin-bottom: 10px;
   padding: 14px;
   text-align: center;
   /* min-width: 90px; */
-  width: 90px;
-  & > * {
-    padding-top: 14px;
-    padding-bottom: 14px;
-  }
+  width: 160px;
 
   & > *:not(:last-child){
     ${({ status }) => {
@@ -80,14 +78,13 @@ export const TopWrapper = styled.div`
 export const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
 `
 
 export const Title = styled.span`
   font-family: Montserrat;
   font-style: normal;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 14px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -131,13 +128,24 @@ export const TimeColumn = styled.div`
 `
 
 export const TimeText = styled(Title)`
-  font-size: 14px;
+  font-size: 12px;
   /* line-height: 6px; */
-  text-align: center;
 `
 
 export const TimeCount = styled(TimeText)`
   font-size: 16px;
   /* line-height: 20px; */
   width: 100%;
+`
+
+export const LineWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  text-align: right !important;
+
+  & > div:not(:last-child){
+    & span {
+      text-align: left !important;
+    }
+  }
 `

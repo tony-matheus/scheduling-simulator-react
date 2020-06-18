@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
 `
 export const TitleWrapper = styled.div`
   display: flex;
+  color: white;
   justify-content:space-between;
 `
 
@@ -20,18 +21,26 @@ export const Title = styled.div`
   font-weight: normal;
   font-size: 26px;
   line-height: 20px;
+  margin-bottom: 5px;
 `
 
 export const List = styled.div`
+  background: #6D7082;
   display: flex;
   flex-wrap: wrap;
+  max-height: 600px;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #282A36;
+  border-radius: 2px;
 `
 
 const MemoryManagerUi = ({ memoryManager }) => {
   return (
     <Container>
       <TitleWrapper>
-        <Title>Memory List {memoryManager.totalMemory} </Title>
+        <Title>Memory List {memoryManager.occupiedMemory}/{memoryManager.totalMemory} Bytes</Title>
         <Title>First Free Block {memoryManager.freeBlockList} </Title>
       </TitleWrapper>
       <List>

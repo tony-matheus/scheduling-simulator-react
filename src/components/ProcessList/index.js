@@ -4,6 +4,7 @@ import ProcessCard from '../_UI/Cards/ProcessCard'
 
 export const Container = styled.div`
   padding: 10px 0;
+  color: white;
 `
 
 export const Title = styled.div`
@@ -22,7 +23,7 @@ export const List = styled.div`
 const ProcessList = ({ processList, title, killProcess }) => {
   return (
     <Container>
-      <Title>{title || 'Process List'}</Title>
+      <Title>{title || 'Process List'}  N˚{processList.length} </Title>
       <List>
         {(processList || []).map((proc, index) => (
           <ProcessCard key={index} {...proc} killProcess={killProcess} />

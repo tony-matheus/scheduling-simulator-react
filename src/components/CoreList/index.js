@@ -4,6 +4,7 @@ import CoreCard from '../_UI/Cards/CoreCard'
 
 export const Container = styled.div`
   padding: 10px 0;
+  color: white;
 `
 
 export const Title = styled.div`
@@ -22,7 +23,7 @@ export const List = styled.div`
 const CoreList = ({ coreList }) => {
   return (
     <Container>
-      <Title>Core List</Title>
+      <Title>Core List N˚{coreList.length}</Title>
       <List>
         {(coreList || []).map((core, index) => (
           <CoreCard key={index} {...core} />
