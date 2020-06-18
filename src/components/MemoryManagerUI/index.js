@@ -54,6 +54,17 @@ export const WrapperInfo = styled.div`
   display: flex;
   width: 100%;
 `
+
+export const WtfWrapper = styled.div`
+  border: 1px solid red;
+
+`
+
+export const TableTitle = styled(Title)`
+  font-size: 12px !important;
+  color: #2DF489;
+`
+
 const MemoryManagerUi = ({ memoryManager }) => {
   return (
     <Container>
@@ -92,6 +103,17 @@ const MemoryManagerUi = ({ memoryManager }) => {
             <Title isLeft>First Free Block</Title>
             <Title>{memoryManager.freeBlockList} </Title>
           </TitleLine>
+          <Title>
+            Statistic Table
+          </Title>
+          {(memoryManager.statisticTable || []).map((line, index) => (
+            <WtfWrapper key={index}>
+              <TitleLine>
+                <TableTitle isLeft>Occurrences {line.occurrences}</TableTitle>
+                <TableTitle> Required Memory {line.requiredMemory}</TableTitle>
+              </TitleLine>
+            </WtfWrapper>
+          ))}
         </TitleWrapper>
       </WrapperInfo>
     </Container>

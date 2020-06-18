@@ -229,7 +229,7 @@ class MemoryManager {
         this.availableMemory > requiredMemory
 
     addMemoryInformation = (requiredMemory) => {
-        this.memoryOverHead += this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0)
+        this.memoryOverHead = this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0)
         this.occupiedMemory += requiredMemory
         this.availableMemory = this.totalMemory - this.memoryOverHead
     }

@@ -48,6 +48,7 @@ class Process {
     this.memoryPointers = []
     return false
   }
+
   generateRandomDynamicMemoryCall = () => {
     setInterval(() => {
       // if ((Math.floor(Math.random() * 4) === 1)) {
