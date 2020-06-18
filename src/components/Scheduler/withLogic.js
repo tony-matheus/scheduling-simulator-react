@@ -41,7 +41,7 @@ const withLogic = Component => withConnect(class extends React.Component {
   }
 
   componentWillMount() {
-    switch (this.props.whichAlg) {
+    switch (this.props.whichAlg.trim()) {
       case 'Round Robin':
         this.roundRobin()
         break;
@@ -76,6 +76,7 @@ const withLogic = Component => withConnect(class extends React.Component {
               core.processTimeLeft = core.processInExecution.totalTIme;
               core.processInExecution.state = 'running'
             }else{
+              debugger
               const index = processList.findIndex(p => p.id === process.id);
               processList.splice(index, 1);
               abortedProcessList.push(process);
@@ -137,6 +138,7 @@ const withLogic = Component => withConnect(class extends React.Component {
               core.status = 'busy';
               core.processInExecution.state = 'running'
             }else{
+              debugger
               const index = processList.findIndex(p => p.id === process.id);
               processList.splice(index, 1);
               abortedProcessList.push(process);
@@ -198,6 +200,7 @@ const withLogic = Component => withConnect(class extends React.Component {
               core.processInExecution = process
               core.processInExecution.state = 'running'
             }else{
+              debugger
               console.log('pegou abortados')
               const index = processList.findIndex(p => p.id === process.id);
               processList.splice(index, 1);
@@ -254,7 +257,7 @@ const withLogic = Component => withConnect(class extends React.Component {
     }, this.state.time)
   }
 
-  allocateProcessMemory = (process) => process.generateRandomStaticMemoryCall(this.props.memoryAllocation)
+  allocateProcessMemory = (process) => process.generateRandomStaticMemoryCall(this.props.memoryAllocation, this.props.freeMemory)
 
   freeMemoryProcess = (process) => {
     this.props.freeMemory(process.memoryPointers)

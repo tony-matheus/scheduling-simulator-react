@@ -35,7 +35,7 @@ class Process {
   generateRandomStaticMemoryCall = (callback = '', clearCallback = '') => {
     // this.totalMemoryUsed = this.randIntTime(1, 400)
     const requestMemory = this.randIntMemory(1, 11)
-    this.totalMemoryUsed = requestMemory
+    this.totalMemoryUsed += requestMemory
     this.callback = callback
     this.clearCallback = clearCallback
     const memoryPointer = this.callback(requestMemory, `p_${this.id}`)
@@ -44,6 +44,8 @@ class Process {
       // this.generateRandomDynamicMemoryCall()
       return true
     }
+    this.clearCallback(this.memoryPointers)
+    this.memoryPointers = []
     return false
   }
   generateRandomDynamicMemoryCall = () => {

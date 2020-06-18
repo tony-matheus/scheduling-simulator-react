@@ -12,26 +12,26 @@ export const Wrapper = styled.div`
 
 export const HideShowButton = styled(Button)`
   position: fixed;
-  top: 380px;
+  bottom: 380px;
   right: 0;
 `
 
 export const NewProcessButton = styled(Button)`
   position: fixed;
-  top: 100px;
-  right: 30px;
+  bottom: 100px;
+  right: 5px;
 `
 
 export const DisableProcessButton = styled(Button)`
   position: fixed;
-  top: 170px;
-  right: 30px;
+  bottom: 170px;
+  right: 5px;
 `
 
 export const StopSchedulerButton = styled(Button)`
   position: fixed;
-  top: 240px;
-  right: 30px;
+  bottom: 150px;
+  right: 5px;
 `
 
 export const Container = styled.div`
@@ -44,8 +44,8 @@ export const Column = styled.div`
 
 export const SliderWrapper = styled.div`
   position: fixed;
-  top: 310px;
-  right: 30px;
+  bottom: 210px;
+  right: 5px;
   width: 300px;
   display: flex;
   color: white;
@@ -82,15 +82,15 @@ const Scheduler = ({
           <PlusOutlined />
         Process
         </NewProcessButton>
-        <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>
+        {/* <DisableProcessButton onClick={() => setIsDisableRandom(!isDisableRandom)}>
           {(isDisableRandom) ? 'Enable' : 'Disable'} Random Process
-        </DisableProcessButton>
+        </DisableProcessButton> */}
         <StopSchedulerButton onClick={changeScheduleProcess}>
           {stopSchedule ? 'Start' : 'Stop'}
-        Scheduler
+          Scheduler
         </StopSchedulerButton>
         <SliderWrapper>
-          <span>100 ms</span>
+          <span onClick={() => changeTime(100)}>100 ms</span>
           <SliderBarWrapper>
             <Slider
               min={100}
@@ -99,7 +99,7 @@ const Scheduler = ({
               value={typeof time === 'number' ? time : 1000}
             />
           </SliderBarWrapper>
-          <span>1000 ms</span>
+          <span onClick={() => changeTime(1000)}>1000 ms</span>
         </SliderWrapper>
       </Wrapper>
       <CoreList coreList={coreList} />

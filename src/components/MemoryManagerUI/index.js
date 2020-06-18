@@ -12,16 +12,29 @@ export const Wrapper = styled.div`
 export const TitleWrapper = styled.div`
   display: flex;
   color: white;
+  flex-direction: column;
+  max-height: 600px;
+  width: 14%;
   justify-content:space-between;
+`
+
+export const TitleLine = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 `
 
 export const Title = styled.div`
   font-family: Montserrat;
   font-style: normal;
   font-weight: normal;
-  font-size: 26px;
+  font-size: 16px;
   line-height: 20px;
   margin-bottom: 5px;
+  ${({ isLeft }) => isLeft
+    ? 'text-align: left; color: #2DF489;'
+    : 'text-align: right;'
+  }
 `
 
 export const List = styled.div`
@@ -29,6 +42,7 @@ export const List = styled.div`
   display: flex;
   flex-wrap: wrap;
   max-height: 600px;
+  width: 85%;
   overflow: hidden;
   overflow-y: auto;
   padding: 10px;
@@ -36,22 +50,51 @@ export const List = styled.div`
   border-radius: 2px;
 `
 
+export const WrapperInfo = styled.div`
+  padding: 10px;
+  display: flex;
+  width: 100%;
+`
 const MemoryManagerUi = ({ memoryManager }) => {
   return (
     <Container>
-      <TitleWrapper>
-        <Title>Memory List {memoryManager.occupiedMemory}/{memoryManager.totalMemory} Bytes</Title>
+      {/* <TitleWrapper>
+        <Title>Memory List {memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory} Bytes</Title>
         <Title>First Free Block {memoryManager.freeBlockList} </Title>
-      </TitleWrapper>
-      <List>
-        {(memoryManager.memory || []).map((memoryBlock, index) => (
-          <MemoryBlockCard
-            key={index}
-            size={Math.ceil((memoryBlock.totalBlockSize / memoryManager.totalMemory) * 100)}
-            {...memoryBlock}
-          />
-        ))}
-      </List>
+      </TitleWrapper> */}
+      <WrapperInfo>
+        <List>
+          {(memoryManager.memory || []).map((memoryBlock, index) => (
+            <MemoryBlockCard
+              key={index}
+              size={Math.ceil((memoryBlock.totalBlockSize / memoryManager.totalMemory) * 100)}
+              {...memoryBlock}
+            />
+          ))}
+        </List>
+        <TitleWrapper>
+          <TitleLine>
+            <Title isLeft>MemoryUsed</Title>
+            <Title>{memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory}</Title>
+          </TitleLine>
+          <TitleLine>
+            <Title isLeft>MemoryUsed</Title>
+            <Title>{memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory}</Title>
+          </TitleLine>
+          <TitleLine>
+            <Title isLeft>OccupiedSpace</Title>
+            <Title>{memoryManager.occupiedMemory}/{memoryManager.totalMemory}</Title>
+          </TitleLine>
+          <TitleLine>
+            <Title isLeft>Blocks Number</Title>
+            <Title>{memoryManager.memory.length}</Title>
+          </TitleLine>
+          <TitleLine>
+            <Title isLeft>First Free Block</Title>
+            <Title>{memoryManager.freeBlockList} </Title>
+          </TitleLine>
+        </TitleWrapper>
+      </WrapperInfo>
     </Container>
   )
 }

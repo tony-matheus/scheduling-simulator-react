@@ -24,7 +24,6 @@ class MemoryManager {
     }
 
     malloc = (requiredMemory, pid) => {
-        debugger
         this.actualPid = pid
         switch (this.memoryAlgorith.toLowerCase()) {
             case 'first fit':
@@ -42,6 +41,7 @@ class MemoryManager {
         const usedMemory = this.memory[memoryAddress].occupiedSize
         this.removeMemoryInformation(usedMemory)
         this.memory[memoryAddress].occupiedSize = 0
+        this.memory[memoryAddress].pid = null
         this.updateFirstFreeBlock()
         this.updateNextBlock()
     }
@@ -63,6 +63,7 @@ class MemoryManager {
     // Algorithms
     firstFit = (requiredMemory) => {
         if (!this.checkFreeMemory(requiredMemory)) {
+            debugger
             return false
         }
         if (this.memory.length === 0) {
@@ -206,6 +207,7 @@ class MemoryManager {
 
     tryCreateMemoryBlock = (requiredMemory) => {
         if (!this.checkCanCreateNewBlock(requiredMemory)) {
+            debugger
             return false
         }
 
@@ -240,6 +242,7 @@ class MemoryManager {
 
     updateFreeBlock = (freeBlockIndex, requiredMemory) => {
         if ((this.memory[freeBlockIndex].occupiedSize + requiredMemory) > this.memory[freeBlockIndex].totalBlockSize) {
+            debugger
             return false
         }
         this.memory[freeBlockIndex].occupiedSize += requiredMemory

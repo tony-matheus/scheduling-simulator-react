@@ -79,8 +79,8 @@ const withLogic = Component => withConnect(class extends React.Component { // cl
   memoryAllocation = (requiredMemory, pid) => {
     const { memoryManager} = this.state
     const memoryPointer = memoryManager.malloc(requiredMemory, pid)
-    console.log(memoryManager.memory)
-    console.log(memoryManager.memory.length)
+    // console.log(memoryManager.memory)
+    // console.log(memoryManager.memory.length)
     // TODO: Visual Part
     this.setState({
       ...this.state,
