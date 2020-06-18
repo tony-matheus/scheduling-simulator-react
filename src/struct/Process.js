@@ -14,8 +14,8 @@ class Process {
     const randNumberTimer = this.randIntTime()
     this.totalTIme = randNumberTimer
     this.remainingTime = randNumberTimer
-    // this.totalTIme = 5
-    // this.remainingTime = 5
+    // this.totalTIme = 1
+    // this.remainingTime = 1
     this.totalMemoryUsed = 0
     this.memoryPointers = []
     this.callback = null

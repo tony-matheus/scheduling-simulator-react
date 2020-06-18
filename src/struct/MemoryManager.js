@@ -113,9 +113,7 @@ class MemoryManager {
     }
 
     checkBestFreeMemory = (requiredMemory, bestIndex, index = this.freeBlockList) => {
-        // console.log(index)
-        // console.log(bestIndex)
-        if (this.memory[index].acceptMemoryRequest(requiredMemory)) {
+        if (this.memory[index].acceptMemoryRequest(requiredMemory) && this.memory[index].occupiedSize === 0) {
             if (bestIndex === -1) {
                 bestIndex = index;
             } else if (this.memory[index].totalBlockSize - requiredMemory < this.memory[bestIndex].totalBlockSize - requiredMemory) {
@@ -160,7 +158,6 @@ class MemoryManager {
                 return b.occurrences - a.occurrences;
             });
 
-            // TODO: Criar listas com a tabela e lincar com os blocos de memória (DONE)
             if (this.numberQuickLists > 11 || this.numberQuickLists === undefined || this.numberQuickLists === 0){
                 (this.numberQuickLists > this.statisticTable.length) ? this.numberQuickLists = this.statisticTable.length : this.numberQuickLists = 3;
             }
@@ -171,7 +168,7 @@ class MemoryManager {
 
             if (this.freeBlockList || this.freeBlockList === 0) {
                 const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists,0)
-                console.log(freeBlockIndex);
+                // console.log(freeBlockIndex);
                 if (!freeBlockIndex && freeBlockIndex !== 0) {
                     return this.tryCreateMemoryBlock(requiredMemory)
                 }
@@ -186,7 +183,7 @@ class MemoryManager {
     checkBlockSizeList = (requiredMemory, lists, flag, index = this.freeBlockList) => {
         for (let count = 0; count < this.numberQuickLists; count++) {
             if (lists[count].requiredMemory === requiredMemory) { // lista - 4 \ req - 4
-                if (this.memory[index].isEqualMemoryRequest(requiredMemory)) { // req = tamanho do bloco ?
+                if (this.memory[index].isEqualMemoryRequest(requiredMemory) && this.memory[index].occupiedSize === 0) { // req = tamanho do bloco ?
                     return index;
                 }
                 if (this.memory[index].nextFreeBlock)
@@ -196,7 +193,9 @@ class MemoryManager {
         if(flag === 0) {
             for (let positionOfMemory = 0; positionOfMemory < this.memory.length; positionOfMemory++) {
                 for (let numberOfList = 0; numberOfList < this.numberQuickLists; numberOfList++) {
-                    if (this.memory[positionOfMemory].acceptMemoryRequest(requiredMemory) && this.memory[positionOfMemory].totalBlockSize !== lists[numberOfList].requiredMemory)
+                    if (this.memory[positionOfMemory].acceptMemoryRequest(requiredMemory) &&
+                        this.memory[positionOfMemory].totalBlockSize !== lists[numberOfList].requiredMemory &&
+                        this.memory[positionOfMemory].occupiedSize === 0)
                         return positionOfMemory
                 }
             }
