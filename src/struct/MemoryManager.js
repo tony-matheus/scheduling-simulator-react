@@ -226,16 +226,16 @@ class MemoryManager {
     }
 
     checkCanCreateNewBlock = (requiredMemory) =>
-        this.totalMemory > (this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0) + requiredMemory)
+        this.availableMemory > requiredMemory
 
     addMemoryInformation = (requiredMemory) => {
-        this.memoryOverHead += requiredMemory
+        this.memoryOverHead += this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0)
         this.occupiedMemory += requiredMemory
         this.availableMemory = this.totalMemory - this.memoryOverHead
     }
 
     removeMemoryInformation = (usedMemory) => {
-        this.memoryOverHead -= usedMemory
+        this.memoryOverHead = this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0)
         this.occupiedMemory -= usedMemory
         this.availableMemory += usedMemory
     }
