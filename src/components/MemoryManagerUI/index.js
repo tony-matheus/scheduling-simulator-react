@@ -15,7 +15,6 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   max-height: 600px;
   width: 14%;
-  justify-content:space-between;
 `
 
 export const TitleLine = styled.div`
@@ -77,10 +76,10 @@ const MemoryManagerUi = ({ memoryManager }) => {
             <Title isLeft>MemoryUsed</Title>
             <Title>{memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory}</Title>
           </TitleLine>
-          <TitleLine>
+          {/* <TitleLine>
             <Title isLeft>MemoryUsed</Title>
             <Title>{memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory}</Title>
-          </TitleLine>
+          </TitleLine> */}
           <TitleLine>
             <Title isLeft>OccupiedSpace</Title>
             <Title>{memoryManager.occupiedMemory}/{memoryManager.totalMemory}</Title>
