@@ -74,7 +74,7 @@ const MemoryManagerUi = ({ memoryManager }) => {
         <TitleWrapper>
           <TitleLine>
             <Title isLeft>MemoryUsed</Title>
-            <Title>{memoryManager.totalMemory - memoryManager.availableMemory}/{memoryManager.totalMemory}</Title>
+            <Title>{memoryManager.totalMemoryBlocks}/{memoryManager.totalMemory}</Title>
           </TitleLine>
           {/* <TitleLine>
             <Title isLeft>MemoryUsed</Title>

@@ -15,6 +15,7 @@ class MemoryManager {
         this.occupiedMemory = 0
         this.memoryAlgorith = memoryAllocationAlg
         this.actualPid = ''
+        this.totalMemoryBlocks = 0
         // quick fit info
         this.statisticTable = []
         this.quickFitFreeBlocks = []
@@ -95,6 +96,7 @@ class MemoryManager {
 
     bestFit = (requiredMemory) => {
         if (!this.checkFreeMemory(requiredMemory)) {
+            console.log("n tem memoria");
             return false
         }
         if (this.memory.length === 0) {
@@ -102,11 +104,13 @@ class MemoryManager {
         }
         if (this.freeBlockList || this.freeBlockList === 0) {
             const freeBlockIndex = this.checkBestFreeMemory(requiredMemory, -1)
-            console.log(freeBlockIndex);
+            // console.log(freeBlockIndex);
             if (!freeBlockIndex && freeBlockIndex !== 0) {
+                console.log("criou bloco");
                 return this.tryCreateMemoryBlock(requiredMemory)
             }
-
+            console.log(freeBlockIndex);
+            console.log("update bloco");
             return this.updateFreeBlock(freeBlockIndex, requiredMemory)
         }
 
@@ -114,15 +118,17 @@ class MemoryManager {
     }
 
     checkBestFreeMemory = (requiredMemory, bestIndex, index = this.freeBlockList) => {
-        if (this.memory[index].acceptMemoryRequest(requiredMemory) && this.memory[index].occupiedSize === 0) {
-            if (bestIndex === -1) {
-                bestIndex = index;
-            } else if (this.memory[index].totalBlockSize - requiredMemory < this.memory[bestIndex].totalBlockSize - requiredMemory) {
-                bestIndex = index;
+        if (this.memory[index].acceptMemoryRequest(requiredMemory)) {
+            if (this.memory[index].occupiedSize === 0) {
+                if (bestIndex === -1) {
+                    bestIndex = index;
+                } else if ((this.memory[index].totalBlockSize - requiredMemory) < (this.memory[bestIndex].totalBlockSize - requiredMemory)) {
+                    bestIndex = index;
+                }
+                if (this.memory[index].nextFreeBlock)
+                    return this.checkBestFreeMemory(requiredMemory, bestIndex, this.memory[index].nextFreeBlock)
+                return bestIndex;
             }
-            if (this.memory[index].nextFreeBlock)
-                return this.checkBestFreeMemory(requiredMemory, bestIndex, this.memory[index].nextFreeBlock)
-            return bestIndex;
         }
         if (this.memory[index].nextFreeBlock)
             return this.checkBestFreeMemory(requiredMemory, bestIndex, this.memory[index].nextFreeBlock)
@@ -159,7 +165,7 @@ class MemoryManager {
                 return b.occurrences - a.occurrences;
             });
 
-            if (this.numberQuickLists > 11 || this.numberQuickLists === undefined || this.numberQuickLists === 0){
+            if (this.numberQuickLists > 11 || this.numberQuickLists === undefined || this.numberQuickLists === 0) {
                 (this.numberQuickLists > this.statisticTable.length) ? this.numberQuickLists = this.statisticTable.length : this.numberQuickLists = 3;
             }
 
@@ -168,7 +174,7 @@ class MemoryManager {
             console.log(lists);
 
             if (this.freeBlockList || this.freeBlockList === 0) {
-                const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists,0)
+                const freeBlockIndex = this.checkBlockSizeList(requiredMemory, lists, 0)
                 // console.log(freeBlockIndex);
                 if (!freeBlockIndex && freeBlockIndex !== 0) {
                     return this.tryCreateMemoryBlock(requiredMemory)
@@ -191,7 +197,8 @@ class MemoryManager {
                     return this.checkBlockSizeList(requiredMemory, lists, 1, this.memory[index].nextFreeBlock)
             }
         }
-        if(flag === 0) {
+
+        if (flag === 0) {
             for (let positionOfMemory = 0; positionOfMemory < this.memory.length; positionOfMemory++) {
                 for (let numberOfList = 0; numberOfList < this.numberQuickLists; numberOfList++) {
                     if (this.memory[positionOfMemory].acceptMemoryRequest(requiredMemory) &&
@@ -206,7 +213,15 @@ class MemoryManager {
     }
 
     tryCreateMemoryBlock = (requiredMemory) => {
+        console.log("uso da memoria: " + this.totalMemoryBlocks/*this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0)*/);
+        console.log("memoria disponivel: " + this.availableMemory);
+        debugger
         if (!this.checkCanCreateNewBlock(requiredMemory)) {
+            console.log(this.availableMemory);
+            console.log(this.checkCanCreateNewBlock(requiredMemory));
+            console.log(this.totalMemory);
+            console.log(this.memory);
+            console.log(this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0) + requiredMemory)
             debugger
             return false
         }
@@ -219,6 +234,7 @@ class MemoryManager {
             pid: this.actualPid
         })
         this.actualPid = ''
+        this.totalMemoryBlocks += requiredMemory
         this.memory.push(memoryBlock)
         this.addMemoryInformation(requiredMemory)
         return this.memory.length - 1
@@ -226,7 +242,9 @@ class MemoryManager {
     }
 
     checkCanCreateNewBlock = (requiredMemory) =>
-        this.totalMemory > (this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0) + requiredMemory)
+        this.totalMemory > this.totalMemoryBlocks + requiredMemory
+    // (this.availableMemory - requiredMemory) > 0
+    // this.totalMemory > (this.memory.reduce((sum, memory) => sum + memory.totalBlockSize, 0) + requiredMemory)
 
     addMemoryInformation = (requiredMemory) => {
         this.memoryOverHead += requiredMemory
